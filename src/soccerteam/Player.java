@@ -28,4 +28,49 @@ public class Player implements Iplayer{
     this.jerseyNumber = jerseyNumber;
     this.actualPosition = Position.BENCH;
   }
+
+  @Override
+  public String getFirstName() {
+    return fistName;
+  }
+
+  @Override
+  public String getLastName() {
+    return lastName;
+  }
+
+  @Override
+  public LocalDate getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  @Override
+  public Player getPreferredPosition() {
+    return preferredPosition;
+  }
+
+  @Override
+  public int getSkillLevel() {
+    return skillLevel;
+  }
+
+  @Override
+  public int getJerseyNumber() {
+    return jerseyNumber;
+  }
+
+  @Override
+  public
+  Position getActualPosition() {
+    return actualPosition;
+  }
+
+  @Override
+  public void setSkillLevel(int newSkillLevel) throws IllegalArgumentException{
+    if ( newSkillLevel >= 1 && newSkillLevel <= 5 ) {
+      skillLevel = newSkillLevel;
+    } else {
+      throw new IllegalArgumentException("Error. Skill level must be within 1 and 5.");
+    }
+  }
 }
