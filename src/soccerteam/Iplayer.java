@@ -3,7 +3,7 @@ package soccerteam;
 import java.time.LocalDate;
 
 /**
- * A player in a soccer team.
+ * A player in a ball game team.
  */
 public interface Iplayer {
   /**
