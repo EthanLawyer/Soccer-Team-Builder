@@ -66,7 +66,7 @@ public interface Iplayer {
    * Sets the skill level of this player, which is a number between
    * 1 and 5 based on the coach's assessment (1 = lowest skill level,
    * 5 = highest skill level).
+   * @param   skillLevel  the skill level of this player
    */
-  void SetSkillLevel();
-
+  void setSkillLevel(int skillLevel);
 }
