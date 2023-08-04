@@ -67,6 +67,8 @@ public interface Iplayer {
    * 1 and 5 based on the coach's assessment (1 = lowest skill level,
    * 5 = highest skill level).
    * @param   newSkillLevel  the skill level of this player
+   * @throws  IllegalArgumentException  when the inputted skill level is
+   *                                    out of range
    */
-  void setSkillLevel(int newSkillLevel);
+  void setSkillLevel(int newSkillLevel) throws IllegalArgumentException;
 }
