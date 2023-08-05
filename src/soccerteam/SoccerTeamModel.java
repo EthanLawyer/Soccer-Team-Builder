@@ -55,10 +55,18 @@ private HashMap<Integer, Iplayer> players;
       throw new IllegalStateException("Error. Team is already full.");
     }
     players.put(player.getJerseyNumber(), player);
+    teamSize++;
   }
 
-  @Override public void removePlayer(int jerseyNumber) {
-
+  @Override
+  public void removePlayer(int jerseyNumber) throws IllegalArgumentException {
+    if ( players.containsKey(jerseyNumber) ) {
+      players.remove(jerseyNumber);
+      teamSize--;
+    } else {
+      throw new IllegalArgumentException("Error. The inputted jersey number is not"
+                                        + " on this team.");
+    }
   }
 
   @Override public void selectStartingLineup() {
