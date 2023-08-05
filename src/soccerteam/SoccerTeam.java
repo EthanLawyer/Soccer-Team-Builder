@@ -22,7 +22,8 @@ public interface SoccerTeam {
 
 
   /**
-   * Returns whether this team has valid number of Players.
+   * Returns whether this team has valid number of Players. A team is valid when
+   * there are no less than 10 players and no more than 20 players.
    * @return boolean
    */
   boolean isValidTeam();
