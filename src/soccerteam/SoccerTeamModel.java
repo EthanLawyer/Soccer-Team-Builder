@@ -220,13 +220,36 @@ private ArrayList<Iplayer> startingLineup;
     playerList.sort(Comparator.comparing(Iplayer::getLastName));
     StringBuilder result = new StringBuilder();
     for (Iplayer player : playerList) {
-      result.append(player.toString()).append("\n");
+      result.append(player).append("\n");
     }
     return result.toString();
   }
 
   @Override
   public String getStartingLineup() {
-    return null;
+    ArrayList<Iplayer> playerList = new ArrayList<>(startingLineup);
+    playerList.sort(Comparator.comparing(Iplayer::getLastName));
+    StringBuilder result = new StringBuilder();
+    for ( Iplayer player : playerList ) {
+      if ( player.getActualPosition() == Position.GOALIE ) {
+        result.append(player);
+        playerList.remove(player);
+        break;
+      }
+    }
+    for ( Iplayer player : playerList ) {
+      if ( player.getActualPosition() == Position.DEFENDER ) {
+        result.append(player);
+        playerList.remove(player);
+      }
+    }
+    for ( Iplayer player : playerList ) {
+      if ( player.getActualPosition() == Position.MIDFIELDER ) {
+        result.append(player);
+        playerList.remove(player);
+      }
+    }
+    result.append(playerList.get(0));
+    return result.toString();
   }
 }
