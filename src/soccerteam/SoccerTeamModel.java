@@ -16,16 +16,23 @@ private HashMap<Integer, Iplayer> players;
     this.players = new HashMap<>();
   }
 
-  @Override public String getName() {
-    return null;
+  @Override
+  public String getName() {
+    return teamName;
   }
 
-  @Override public int getSize() {
-    return 0;
+  @Override
+  public int getSize() {
+    return teamSize;
   }
 
-  @Override public boolean isValidTeam() {
-    return false;
+  @Override
+  public boolean isValidTeam() {
+    if (teamSize >= 10 && teamSize <= 20) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override public int generateJerseyNumber() {
@@ -44,11 +51,13 @@ private HashMap<Integer, Iplayer> players;
 
   }
 
-  @Override public String getAllPlayers() {
+  @Override
+  public String getAllPlayers() {
     return null;
   }
 
-  @Override public String getStartingLineup() {
+  @Override
+  public String getStartingLineup() {
     return null;
   }
 }
