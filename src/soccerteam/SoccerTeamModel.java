@@ -1,5 +1,6 @@
 package soccerteam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -7,6 +8,7 @@ public class SoccerTeamModel implements SoccerTeam{
 private String teamName;
 private int teamSize;
 private HashMap<Integer, Iplayer> players;
+private ArrayList<Integer> startingLineup;
 
   /**
    * Constructor.
@@ -18,6 +20,7 @@ private HashMap<Integer, Iplayer> players;
     this.teamName = teamName;
     this.teamSize = 0;
     this.players = new HashMap<>();
+    this.startingLineup = new ArrayList<>();
   }
 
   @Override
@@ -32,11 +35,7 @@ private HashMap<Integer, Iplayer> players;
 
   @Override
   public boolean isValidTeam() {
-    if (teamSize >= 10 && teamSize <= 20) {
-      return true;
-    } else {
-      return false;
-    }
+    return teamSize >= 10 && teamSize <= 20;
   }
 
   @Override
@@ -63,14 +62,22 @@ private HashMap<Integer, Iplayer> players;
     if ( players.containsKey(jerseyNumber) ) {
       players.remove(jerseyNumber);
       teamSize--;
+      for ( int i = 0; i < startingLineup.size(); i++ ){
+        if ( startingLineup.get(i) == jerseyNumber ){
+          startingLineup.remove(i);
+        }
+      }
     } else {
       throw new IllegalArgumentException("Error. The inputted jersey number is not"
                                         + " on this team.");
     }
   }
 
-  @Override public void selectStartingLineup() {
+  @Override
+  public void selectStartingLineup() throws IllegalStateException {
 
+    }
+    throw new IllegalStateException("Error. The team is not valid yet.");
   }
 
   @Override
