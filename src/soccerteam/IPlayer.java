@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * A player in a ball game team.
  */
-public interface Iplayer {
+public interface IPlayer {
   /**
    * Gets the first name of this player.
    * @return a string of this player's first name.

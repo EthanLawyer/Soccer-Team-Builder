@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * A player in a soccer team.
  */
-public class Player implements Iplayer{
+public class Player implements IPlayer {
   private final String fistName;
   private final String lastName;
   private final LocalDate dateOfBirth;

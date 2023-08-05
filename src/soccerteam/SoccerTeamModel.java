@@ -11,21 +11,21 @@ import java.util.TreeSet;
 public class SoccerTeamModel implements SoccerTeam{
 private String teamName;
 private int teamSize;
-private HashMap<Integer, Iplayer> teamPlayers;
-private ArrayList<Iplayer> startingLineup;
+private HashMap<Integer, IPlayer> teamPlayers;
+private ArrayList<IPlayer> startingLineup;
 
   /**
    * Constructor.
    * Players will be a hashmap, where keys are jersey numbers, and values
-   * are Iplayer objects. If there are less than 10 players, the user will
+   * are IPlayer objects. If there are less than 10 players, the user will
    * be informed that the team cannot be created unless more players are
    * added. If the team has more than 20 players, the ones with the lowest
    * skill level must be ignored so that we only have 20 players.
    * @param   teamName  the name of this team
-   * @param   players   a list of Iplayer objects
+   * @param   players   a list of IPlayer objects
    * @throws  IllegalArgumentException  when inputted less than 10 players
    */
-  public SoccerTeamModel(String teamName, ArrayList<Iplayer> players)
+  public SoccerTeamModel(String teamName, ArrayList<IPlayer> players)
       throws IllegalArgumentException
   {
     // If less than 10 players, a team cannot be created.
@@ -36,7 +36,7 @@ private ArrayList<Iplayer> startingLineup;
     // If more than 20 players, the least skilled ones will be ignored.
     if ( players.size() > 20 ) {
       int redundant = players.size() - 20;
-      players.sort(Comparator.comparing(Iplayer::getSkillLevel));
+      players.sort(Comparator.comparing(IPlayer::getSkillLevel));
       for ( int i = 0; i < redundant; i++ ) {
         players.remove(0);
       }
@@ -50,7 +50,7 @@ private ArrayList<Iplayer> startingLineup;
     // After generating jersey numbers, add each player to the teamPlayers hashmap.
     this.teamPlayers = new HashMap<>();
     for ( int jersey : jerseyNumbers ) {
-      Iplayer addedPlayer = players.remove(0);
+      IPlayer addedPlayer = players.remove(0);
       addedPlayer.setJerseyNumber(jersey);
       teamPlayers.put(jersey,addedPlayer);
     }
@@ -85,7 +85,7 @@ private ArrayList<Iplayer> startingLineup;
   }
 
   @Override
-  public void addPlayer(Iplayer player) throws IllegalStateException {
+  public void addPlayer(IPlayer player) throws IllegalStateException {
     if ( teamSize >= 20 ){
       throw new IllegalStateException("Error. Team is already full.");
     }
@@ -125,17 +125,17 @@ private ArrayList<Iplayer> startingLineup;
   public void selectStartingLineup() throws IllegalStateException {
 
     // Create priority queues (max) of all players.
-    PriorityQueue<Iplayer> sortedPlayers = new PriorityQueue<>(
-        Comparator.comparing(Iplayer::getSkillLevel).reversed());
-    for ( Map.Entry<Integer, Iplayer> entry : teamPlayers.entrySet() ) {
-      Iplayer player = entry.getValue();
+    PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<>(
+        Comparator.comparing(IPlayer::getSkillLevel).reversed());
+    for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
+      IPlayer player = entry.getValue();
       sortedPlayers.add(player);
     }
 
     // Create priority queues (max) of all Goalies, and move them from sortedPlayers to here.
-    PriorityQueue<Iplayer> goalies = new PriorityQueue<>(
-        Comparator.comparing(Iplayer::getSkillLevel).reversed());
-    for (Iplayer player : sortedPlayers) {
+    PriorityQueue<IPlayer> goalies = new PriorityQueue<>(
+        Comparator.comparing(IPlayer::getSkillLevel).reversed());
+    for (IPlayer player : sortedPlayers) {
       if (player.getPreferredPosition() == Position.GOALIE) {
         goalies.add(player);
         sortedPlayers.remove(player);
@@ -147,13 +147,13 @@ private ArrayList<Iplayer> startingLineup;
 
     // Select the highest skilled Goalie (if exists in goalies' PriorityQueue).
     if ( goalies.size() >= 1 ) {
-      Iplayer goalie = goalies.peek();
+      IPlayer goalie = goalies.peek();
       startingLineup.add(goalie);
       goalie.setActualPosition(Position.GOALIE);
     }
 
     // Select the other 6 players in the starting lineup.
-    ArrayList<Iplayer> otherSixLineups = new ArrayList<>();
+    ArrayList<IPlayer> otherSixLineups = new ArrayList<>();
     while ( otherSixLineups.size() < 6 ) {
       otherSixLineups.add(sortedPlayers.poll());
     }
@@ -161,7 +161,7 @@ private ArrayList<Iplayer> startingLineup;
     // Select the defenders for starting lineup.
     ArrayList<Integer> defendersIndex = new ArrayList<>();
     for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      Iplayer player = otherSixLineups.get(i);
+      IPlayer player = otherSixLineups.get(i);
       Position position = player.getPreferredPosition();
       while ( defendersIndex.size() < 2 ) {
         if (position == Position.DEFENDER) {
@@ -180,7 +180,7 @@ private ArrayList<Iplayer> startingLineup;
     // Select the midfielders for starting lineup.
     ArrayList<Integer> midfieldersIndex = new ArrayList<>();
     for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      Iplayer player = otherSixLineups.get(i);
+      IPlayer player = otherSixLineups.get(i);
       Position position = player.getPreferredPosition();
       while ( midfieldersIndex.size() < 3 ) {
         if (position == Position.MIDFIELDER) {
@@ -199,7 +199,7 @@ private ArrayList<Iplayer> startingLineup;
     // Select the forward for starting lineup.
     ArrayList<Integer> forwardIndex = new ArrayList<>();
     for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      Iplayer player = otherSixLineups.get(i);
+      IPlayer player = otherSixLineups.get(i);
       Position position = player.getPreferredPosition();
       while ( forwardIndex.size() < 1 ) {
         if (position == Position.FORWARD) {
@@ -218,7 +218,7 @@ private ArrayList<Iplayer> startingLineup;
     // Check if the starting lineup has been properly selected.
     // Make up for shorted goalie first (if any).
     if ( goalies.size() < 1 ) {
-      Iplayer switchedGoalie = sortedPlayers.poll();
+      IPlayer switchedGoalie = sortedPlayers.poll();
       startingLineup.add(switchedGoalie);
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
@@ -228,7 +228,7 @@ private ArrayList<Iplayer> startingLineup;
       if ( defendersIndex.size() < 2 ) {
         int neededDefenders = 2 - defendersIndex.size();
         for ( int i = 0; i < neededDefenders; i++ ){
-          Iplayer switchedDefender = otherSixLineups.remove(0);
+          IPlayer switchedDefender = otherSixLineups.remove(0);
           startingLineup.add(switchedDefender);
           switchedDefender.setActualPosition(Position.DEFENDER);
         }
@@ -237,14 +237,14 @@ private ArrayList<Iplayer> startingLineup;
       if ( midfieldersIndex.size() < 3 ) {
         int neededMidfielders = 3 - midfieldersIndex.size();
         for ( int i = 0; i < neededMidfielders; i++ ){
-          Iplayer switchedMidfielder = otherSixLineups.remove(0);
+          IPlayer switchedMidfielder = otherSixLineups.remove(0);
           startingLineup.add(switchedMidfielder);
           switchedMidfielder.setActualPosition(Position.MIDFIELDER);
         }
       }
       // Make up for shorted forward (if any).
       if ( forwardIndex.size() < 1 ) {
-        Iplayer switchedForward = otherSixLineups.remove(0);
+        IPlayer switchedForward = otherSixLineups.remove(0);
         startingLineup.add(switchedForward);
         switchedForward.setActualPosition(Position.FORWARD);
       }
@@ -253,10 +253,10 @@ private ArrayList<Iplayer> startingLineup;
 
   @Override
   public String getAllPlayers() {
-    ArrayList<Iplayer> playerList = new ArrayList<>(teamPlayers.values());
-    playerList.sort(Comparator.comparing(Iplayer::getLastName));
+    ArrayList<IPlayer> playerList = new ArrayList<>(teamPlayers.values());
+    playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();
-    for (Iplayer player : playerList) {
+    for (IPlayer player : playerList) {
       result.append(player).append("\n");
     }
     return result.toString();
@@ -264,23 +264,23 @@ private ArrayList<Iplayer> startingLineup;
 
   @Override
   public String getStartingLineup() {
-    ArrayList<Iplayer> playerList = new ArrayList<>(startingLineup);
-    playerList.sort(Comparator.comparing(Iplayer::getLastName));
+    ArrayList<IPlayer> playerList = new ArrayList<>(startingLineup);
+    playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();
-    for ( Iplayer player : playerList ) {
+    for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.GOALIE ) {
         result.append(player);
         playerList.remove(player);
         break;
       }
     }
-    for ( Iplayer player : playerList ) {
+    for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.DEFENDER ) {
         result.append(player);
         playerList.remove(player);
       }
     }
-    for ( Iplayer player : playerList ) {
+    for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.MIDFIELDER ) {
         result.append(player);
         playerList.remove(player);
