@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -217,7 +218,12 @@ private ArrayList<Iplayer> startingLineup;
 
   @Override
   public String getAllPlayers() {
-    return null;
+    List<Iplayer> playerList = new ArrayList<>(players.values());
+    playerList.sort(Comparator.comparing(Iplayer::getLastName));
+    String result = null;
+    for (Iplayer player : playerList) {
+      result = result + player.toString() + "\n";
+    }
   }
 
   @Override
