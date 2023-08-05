@@ -224,6 +224,7 @@ private ArrayList<Iplayer> startingLineup;
     for (Iplayer player : playerList) {
       result = result + player.toString() + "\n";
     }
+    return result;
   }
 
   @Override
