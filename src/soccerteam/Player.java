@@ -74,6 +74,10 @@ public class Player implements Iplayer{
     }
   }
 
+  @Override
+  public void setActualPosition(Position position) {
+   actualPosition = position;
+  }
 
   /**
    * Sets the jersey number of a player, which is a unique number between 1 and 20, and cannot
