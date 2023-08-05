@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.TreeSet;
 
 public class SoccerTeamModel implements SoccerTeam{
 private String teamName;
 private int teamSize;
-private HashMap<Integer, Iplayer> players;
+private HashMap<Integer, Iplayer> teamPlayers;
 private ArrayList<Iplayer> startingLineup;
 
   /**
@@ -21,28 +22,40 @@ private ArrayList<Iplayer> startingLineup;
    * added. If the team has more than 20 players, the ones with the lowest
    * skill level must be ignored so that we only have 20 players.
    * @param   teamName  the name of this team
-   * @param   players   the hashmap of players
+   * @param   players   a list of Iplayer objects
    * @throws  IllegalArgumentException  when inputted less than 10 players
    */
-  public SoccerTeamModel(String teamName, HashMap<Integer, Iplayer> players)
+  public SoccerTeamModel(String teamName, ArrayList<Iplayer> players)
       throws IllegalArgumentException
   {
+    // If less than 10 players, a team cannot be created.
     if ( players.size() < 10 ) {
       throw new IllegalArgumentException("Error. At least 10 players are "
                                         + "needed. Please add more.");
     }
+    // If more than 20 players, the least skilled ones will be ignored.
     if ( players.size() > 20 ) {
       int redundant = players.size() - 20;
-      ArrayList<Iplayer> sortedBySkill = new ArrayList<>(players.values());
-      sortedBySkill.sort(Comparator.comparing(Iplayer::getSkillLevel));
+      players.sort(Comparator.comparing(Iplayer::getSkillLevel));
       for ( int i = 0; i < redundant; i++ ) {
-        Iplayer removed = sortedBySkill.remove(0);
-        players.remove(removed.getJerseyNumber());
+        players.remove(0);
       }
+    }
+    // When number of players is valid, we assign jersey numbers for players,
+    // and store them in a treeset to avoid duplication.
+    TreeSet<Integer> jerseyNumbers = new TreeSet<>();
+    while ( jerseyNumbers.size() < players.size() ) {
+      jerseyNumbers.add(generateJerseyNumber());
+    }
+    // After generating jersey numbers, add each player to the teamPlayers hashmap.
+    this.teamPlayers = new HashMap<>();
+    for ( int jersey : jerseyNumbers ) {
+      Iplayer addedPlayer = players.remove(0);
+      addedPlayer.setJerseyNumber(jersey);
+      teamPlayers.put(jersey,addedPlayer);
     }
     this.teamName = teamName;
     this.teamSize = 0;
-    this.players = players;
     this.startingLineup = new ArrayList<>();
   }
 
@@ -61,13 +74,13 @@ private ArrayList<Iplayer> startingLineup;
     return teamSize >= 10 && teamSize <= 20;
   }
 
-  @Override
-  public int generateJerseyNumber() {
+  /**
+   * Generates a random jersey number between 1 and 20.
+   * @return int
+   */
+  private int generateJerseyNumber() {
     Random random = new Random();
     int newNumber = random.nextInt(20) + 1;
-    while ( players.containsKey(newNumber) ){
-      newNumber = random.nextInt(20) + 1;
-    }
     return newNumber;
   }
 
@@ -76,7 +89,7 @@ private ArrayList<Iplayer> startingLineup;
     if ( teamSize >= 20 ){
       throw new IllegalStateException("Error. Team is already full.");
     }
-    players.put(player.getJerseyNumber(), player);
+    teamPlayers.put(player.getJerseyNumber(), player);
     teamSize++;
   }
 
@@ -88,8 +101,8 @@ private ArrayList<Iplayer> startingLineup;
       throw new IllegalStateException("Error. Only 10 players left, cannot "
                                     + "remove any player.");
     }
-    if ( players.containsKey(jerseyNumber) ) {
-      players.remove(jerseyNumber);
+    if ( teamPlayers.containsKey(jerseyNumber) ) {
+      teamPlayers.remove(jerseyNumber);
       teamSize--;
       for ( int i = 0; i < startingLineup.size(); i++ ){
         if ( startingLineup.get(i).getJerseyNumber() == jerseyNumber ){
@@ -109,7 +122,7 @@ private ArrayList<Iplayer> startingLineup;
     // Create priority queues (max) of all players.
     PriorityQueue<Iplayer> sortedPlayers = new PriorityQueue<>(
         Comparator.comparing(Iplayer::getSkillLevel).reversed());
-    for ( Map.Entry<Integer, Iplayer> entry : players.entrySet() ) {
+    for ( Map.Entry<Integer, Iplayer> entry : teamPlayers.entrySet() ) {
       Iplayer player = entry.getValue();
       sortedPlayers.add(player);
     }
@@ -235,7 +248,7 @@ private ArrayList<Iplayer> startingLineup;
 
   @Override
   public String getAllPlayers() {
-    ArrayList<Iplayer> playerList = new ArrayList<>(players.values());
+    ArrayList<Iplayer> playerList = new ArrayList<>(teamPlayers.values());
     playerList.sort(Comparator.comparing(Iplayer::getLastName));
     StringBuilder result = new StringBuilder();
     for (Iplayer player : playerList) {
