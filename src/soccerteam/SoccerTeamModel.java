@@ -3,7 +3,6 @@ package soccerteam;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -17,13 +16,33 @@ private ArrayList<Iplayer> startingLineup;
   /**
    * Constructor.
    * Players will be a hashmap, where keys are jersey numbers, and values
-   * are Iplayer objects.
+   * are Iplayer objects. If there are less than 10 players, the user will
+   * be informed that the team cannot be created unless more players are
+   * added. If the team has more than 20 players, the ones with the lowest
+   * skill level must be ignored so that we only have 20 players.
    * @param   teamName  the name of this team
+   * @param   players   the hashmap of players
+   * @throws  IllegalArgumentException  when inputted less than 10 players
    */
-  public SoccerTeamModel(String teamName) {
+  public SoccerTeamModel(String teamName, HashMap<Integer, Iplayer> players)
+      throws IllegalArgumentException
+  {
+    if ( players.size() < 10 ) {
+      throw new IllegalArgumentException("Error. At least 10 players are "
+                                        + "needed. Please add more.");
+    }
+    if ( players.size() > 20 ) {
+      int redundant = players.size() - 20;
+      ArrayList<Iplayer> sortedBySkill = new ArrayList<>(players.values());
+      sortedBySkill.sort(Comparator.comparing(Iplayer::getSkillLevel));
+      for ( int i = 0; i < redundant; i++ ) {
+        Iplayer removed = sortedBySkill.remove(0);
+        players.remove(removed.getJerseyNumber());
+      }
+    }
     this.teamName = teamName;
     this.teamSize = 0;
-    this.players = new HashMap<>();
+    this.players = players;
     this.startingLineup = new ArrayList<>();
   }
 
@@ -216,7 +235,7 @@ private ArrayList<Iplayer> startingLineup;
 
   @Override
   public String getAllPlayers() {
-    List<Iplayer> playerList = new ArrayList<>(players.values());
+    ArrayList<Iplayer> playerList = new ArrayList<>(players.values());
     playerList.sort(Comparator.comparing(Iplayer::getLastName));
     StringBuilder result = new StringBuilder();
     for (Iplayer player : playerList) {
