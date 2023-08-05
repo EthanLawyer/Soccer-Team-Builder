@@ -6,13 +6,13 @@ import java.time.LocalDate;
  * A player in a soccer team.
  */
 public class Player implements Iplayer{
-  protected String fistName;
-  protected String lastName;
-  protected LocalDate dateOfBirth;
-  Position preferredPosition;
-  int skillLevel;
-  protected int jerseyNumber;
-  Position actualPosition;
+  private final String fistName;
+  private final String lastName;
+  private final LocalDate dateOfBirth;
+  private Position preferredPosition;
+  protected int skillLevel;
+  private int jerseyNumber;
+  protected Position actualPosition;
 
   /**
    * Constructor.
