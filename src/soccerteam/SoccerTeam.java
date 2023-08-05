@@ -30,13 +30,6 @@ public interface SoccerTeam {
 
 
   /**
-   * Generates a random jersey number between 1 and 20.
-   * @return int
-   */
-  int generateJerseyNumber();
-
-
-  /**
    * Adds a Player to this team.
    * @param    player    an Iplayer object
    * @throws  IllegalStateException   when the team is full
