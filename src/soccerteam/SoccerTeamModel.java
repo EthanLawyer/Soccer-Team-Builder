@@ -3,7 +3,6 @@ package soccerteam;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -70,6 +69,7 @@ private ArrayList<Iplayer> startingLineup;
       for ( int i = 0; i < startingLineup.size(); i++ ){
         if ( startingLineup.get(i).getJerseyNumber() == jerseyNumber ){
           startingLineup.remove(i);
+          break;
         }
       }
     } else {
@@ -94,10 +94,8 @@ private ArrayList<Iplayer> startingLineup;
       // Create priority queues (max) of all Goalies, and move them from sortedPlayers to here.
       PriorityQueue<Iplayer> goalies = new PriorityQueue<>(
           Comparator.comparing(Iplayer::getSkillLevel).reversed());
-      Iterator<Iplayer> iterator = sortedPlayers.iterator();
-      while ( iterator.hasNext() ) {
-        Iplayer player = iterator.next();
-        if ( player.getPreferredPosition() == Position.GOALIE ) {
+      for (Iplayer player : sortedPlayers) {
+        if (player.getPreferredPosition() == Position.GOALIE) {
           goalies.add(player);
           sortedPlayers.remove(player);
         }
@@ -133,8 +131,8 @@ private ArrayList<Iplayer> startingLineup;
         }
       }
       if ( defendersIndex.size() > 0 ) {
-        for (int i = 0; i < defendersIndex.size(); i++) {
-          otherSixLineups.remove(defendersIndex.get(i));
+        for (int index : defendersIndex) {
+          otherSixLineups.remove(index);
         }
       }
 
@@ -152,8 +150,8 @@ private ArrayList<Iplayer> startingLineup;
         }
       }
       if ( midfieldersIndex.size() > 0 ) {
-        for (int i = 0; i < midfieldersIndex.size(); i++) {
-          otherSixLineups.remove(midfieldersIndex.get(i));
+        for (int index : midfieldersIndex) {
+          otherSixLineups.remove(index);
         }
       }
 
@@ -171,8 +169,8 @@ private ArrayList<Iplayer> startingLineup;
         }
       }
       if ( forwardIndex.size() > 0 ) {
-        for (int i = 0; i < forwardIndex.size(); i++) {
-          otherSixLineups.remove(forwardIndex.get(i));
+        for (int index : forwardIndex) {
+          otherSixLineups.remove(index);
         }
       }
 
