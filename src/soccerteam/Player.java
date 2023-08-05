@@ -18,14 +18,14 @@ public class Player implements Iplayer{
    * Constructor.
    */
   public Player(String fistName, String lastName, LocalDate dateOfBirth,
-            Position preferredPosition, int skillLevel, int jerseyNumber)
+            Position preferredPosition, int skillLevel)
   {
     this.fistName = fistName;
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
     this.preferredPosition = preferredPosition;
     this.skillLevel = skillLevel;
-    this.jerseyNumber = jerseyNumber;
+    this.jerseyNumber = -1; // Jersey number will be -1 at default, and is only changeable when it is -1.
     this.actualPosition = Position.BENCH;
   }
 
