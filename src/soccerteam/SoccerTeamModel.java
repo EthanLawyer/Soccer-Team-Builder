@@ -218,11 +218,11 @@ private ArrayList<Iplayer> startingLineup;
   public String getAllPlayers() {
     List<Iplayer> playerList = new ArrayList<>(players.values());
     playerList.sort(Comparator.comparing(Iplayer::getLastName));
-    String result = null;
+    StringBuilder result = new StringBuilder();
     for (Iplayer player : playerList) {
-      result = result + player.toString() + "\n";
+      result.append(player.toString()).append("\n");
     }
-    return result;
+    return result.toString();
   }
 
   @Override
