@@ -73,4 +73,22 @@ public class Player implements Iplayer{
       throw new IllegalArgumentException("Error. Skill level must be within 1 and 5.");
     }
   }
+
+
+  /**
+   * Sets the jersey number of a player, which is a unique number between 1 and 20, and cannot
+   * be changed once created. The jersey number is assigned once a team is created.
+   * @param  number  the assigned jersey number
+   * @throws IllegalArgumentException when the jersey number is not valid
+   * @throws IllegalStateException when this player already has a jersey number
+   */
+  public void setJerseyNumber(int number) throws IllegalArgumentException, IllegalStateException{
+    if ( number < 1 || number > 20 ){
+      throw new IllegalArgumentException("Invalid number. Jersey number should be within 1 and 20.");
+    }
+    if ( this.jerseyNumber != -1 ){
+      throw new IllegalStateException("Error. This player already has a jersey number.");
+    }
+    this.jerseyNumber = number;
+  }
 }
