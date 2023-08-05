@@ -71,4 +71,12 @@ public interface Iplayer {
    *                                    out of range
    */
   void setSkillLevel(int newSkillLevel) throws IllegalArgumentException;
+
+
+  /**
+   * Sets the actual position of a player. This will only be set when this player
+   * is on the starting lineup.
+   * @param   position   this player's assigned position on court
+   */
+  void setActualPosition(Position position);
 }
