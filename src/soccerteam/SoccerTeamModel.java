@@ -81,7 +81,13 @@ private ArrayList<Iplayer> startingLineup;
   }
 
   @Override
-  public void removePlayer(int jerseyNumber) throws IllegalArgumentException {
+  public void removePlayer(int jerseyNumber) throws IllegalStateException,
+                                                    IllegalArgumentException
+  {
+    if ( teamSize == 10 ) {
+      throw new IllegalStateException("Error. Only 10 players left, cannot "
+                                    + "remove any player.");
+    }
     if ( players.containsKey(jerseyNumber) ) {
       players.remove(jerseyNumber);
       teamSize--;
@@ -92,8 +98,8 @@ private ArrayList<Iplayer> startingLineup;
         }
       }
     } else {
-      throw new IllegalArgumentException("Error. The inputted jersey number is not"
-                                        + " on this team.");
+      throw new IllegalArgumentException("Error. The inputted jersey number "
+                                        + "is not on this team.");
     }
   }
 
