@@ -39,8 +39,9 @@ public interface SoccerTeam {
   /**
    * Adds a Player to this team.
    * @param    player    an Iplayer object
+   * @throws  IllegalStateException   when the team is full
    */
-  void addPlayer(Iplayer player);
+  void addPlayer(Iplayer player) throws IllegalStateException;
 
 
   /**
