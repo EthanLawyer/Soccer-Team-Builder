@@ -91,4 +91,17 @@ public class Player implements Iplayer{
     }
     this.jerseyNumber = number;
   }
+
+  /**
+   * Returns this player's first name, last name, jersey number, and position (only when the
+   * actual position is assigned) in a string format.
+   */
+  @Override
+  public String toString(){
+    String result = fistName + " " + lastName + " (" + jerseyNumber + ")";
+    if ( actualPosition != Position.BENCH ){
+      result = result + ", " + actualPosition.toString();
+    }
+    return result;
+  }
 }
