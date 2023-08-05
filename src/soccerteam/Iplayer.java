@@ -28,11 +28,11 @@ public interface Iplayer {
 
 
   /**
-   * Gets the preferred position of this player
-   * (goalie, defender, midfielder, forward).
+   * Gets the preferred position of this player (goalie, defender, midfielder, forward).
+   *
    * @return the {@link Player} of this player's preferred position
    */
-  Player getPreferredPosition();
+  Position getPreferredPosition();
 
 
   /**

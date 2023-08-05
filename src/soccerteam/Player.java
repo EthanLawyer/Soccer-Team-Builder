@@ -45,7 +45,7 @@ public class Player implements Iplayer{
   }
 
   @Override
-  public Player getPreferredPosition() {
+  public Position getPreferredPosition() {
     return preferredPosition;
   }
 
