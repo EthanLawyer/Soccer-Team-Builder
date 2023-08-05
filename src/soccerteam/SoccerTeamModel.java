@@ -1,11 +1,13 @@
 package soccerteam;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class SoccerTeamModel implements SoccerTeam{
 private String teamName;
 private int teamSize;
 private HashMap<Integer, Iplayer> players;
+private
 
   /**
    * Constructor.
@@ -38,8 +40,14 @@ private HashMap<Integer, Iplayer> players;
     }
   }
 
-  @Override public int generateJerseyNumber() {
-    return 0;
+  @Override
+  public int generateJerseyNumber() {
+    Random random = new Random();
+    int newNumber = random.nextInt(20) + 1;
+    while ( players.containsKey(newNumber) ){
+      newNumber = random.nextInt(20) + 1;
+    }
+    return newNumber;
   }
 
   @Override public void addPlayer(Iplayer player) {
