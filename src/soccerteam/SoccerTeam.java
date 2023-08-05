@@ -47,10 +47,11 @@ public interface SoccerTeam {
   /**
    * Removes a player from this team.
    * @param   jerseyNumber  the jersey number of the player to be removed
+   * @throws IllegalStateException    when the team has only 10 players
    * @throws IllegalArgumentException when the inputted jersey number is
    *                                  not on this team
    */
-  void removePlayer(int jerseyNumber) throws IllegalArgumentException;
+  void removePlayer(int jerseyNumber) throws IllegalStateException, IllegalArgumentException;
 
 
   /**
