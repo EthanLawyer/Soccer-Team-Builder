@@ -7,7 +7,6 @@ public class SoccerTeamModel implements SoccerTeam{
 private String teamName;
 private int teamSize;
 private HashMap<Integer, Iplayer> players;
-private
 
   /**
    * Constructor.
@@ -50,8 +49,12 @@ private
     return newNumber;
   }
 
-  @Override public void addPlayer(Iplayer player) {
-
+  @Override
+  public void addPlayer(Iplayer player) throws IllegalStateException {
+    if ( teamSize >= 20 ){
+      throw new IllegalStateException("Error. Team is already full.");
+    }
+    players.put(player.getJerseyNumber(), player);
   }
 
   @Override public void removePlayer(int jerseyNumber) {
