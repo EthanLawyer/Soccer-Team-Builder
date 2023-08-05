@@ -9,6 +9,9 @@ private HashMap<Integer, Iplayer> players;
 
   /**
    * Constructor.
+   * Players will be a hashmap, where keys are jersey numbers, and values
+   * are Iplayer objects.
+   * @param   teamName  the name of this team
    */
   public SoccerTeamModel(String teamName) {
     this.teamName = teamName;
