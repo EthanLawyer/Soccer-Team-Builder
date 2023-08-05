@@ -89,7 +89,12 @@ private ArrayList<Iplayer> startingLineup;
     if ( teamSize >= 20 ){
       throw new IllegalStateException("Error. Team is already full.");
     }
-    teamPlayers.put(player.getJerseyNumber(), player);
+    int newJerseyNumber = generateJerseyNumber();
+    while ( teamPlayers.containsKey(newJerseyNumber) ) {
+      newJerseyNumber = generateJerseyNumber();
+    }
+    player.setJerseyNumber(newJerseyNumber);
+    teamPlayers.put(newJerseyNumber, player);
     teamSize++;
   }
 
