@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
 
-public class SoccerTeamModel implements SoccerTeam{
+public class Team implements ITeam {
 private String teamName;
 private int teamSize;
 private HashMap<Integer, IPlayer> teamPlayers;
@@ -27,7 +27,7 @@ private ArrayList<IPlayer> startingLineup;
    * @param   players   a list of IPlayer objects
    * @throws  IllegalArgumentException  when inputted less than 10 players
    */
-  public SoccerTeamModel(String teamName, ArrayList<IPlayer> players)
+  public Team(String teamName, ArrayList<IPlayer> players)
       throws IllegalArgumentException
   {
     // If less than 10 players, a team cannot be created.
