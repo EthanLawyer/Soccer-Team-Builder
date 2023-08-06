@@ -1,5 +1,6 @@
 package soccerteam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -26,6 +27,13 @@ public interface ITeam {
    * @return HashMap<Integer, IPlayer>
    */
   HashMap<Integer, IPlayer> getTeamPlayers();
+
+
+  /**
+   * Gets the ArrayList of players in the starting lineup of this team.
+   * @return ArrayList<IPlayer>
+   */
+  ArrayList<IPlayer> getStartingLineup();
 
 
   /**
