@@ -92,6 +92,7 @@ public class Player implements IPlayer {
     if ( number < 1 || number > 20 ){
       throw new IllegalArgumentException("Invalid number. Jersey number should be within 1 and 20.");
     }
+    // Jersey number cannot be changed once set.
     if ( this.jerseyNumber != -1 ){
       throw new IllegalStateException("Error. This player already has a jersey number.");
     }
