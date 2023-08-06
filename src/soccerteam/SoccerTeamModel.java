@@ -47,9 +47,7 @@ private ArrayList<IPlayer> startingLineup;
     if ( players.size() > 20 ) {
       int redundant = players.size() - 20;
       players.sort(Comparator.comparing(IPlayer::getSkillLevel));
-      for ( int i = 0; i < redundant; i++ ) {
-        players.remove(0);
-      }
+      players.subList(0, redundant).clear();
     }
     // When number of players is valid, we assign jersey numbers for players,
     // and store them in a treeset to avoid duplication.
@@ -90,8 +88,7 @@ private ArrayList<IPlayer> startingLineup;
    */
   private int generateJerseyNumber() {
     Random random = new Random();
-    int newNumber = random.nextInt(20) + 1;
-    return newNumber;
+    return random.nextInt(20) + 1;
   }
 
   @Override
@@ -137,8 +134,10 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public void selectStartingLineup() throws IllegalStateException {
+    // Each time wipe the previous starting lineup and create a new one.
+    startingLineup = new ArrayList<>();
 
-    // Create priority queues (max) of all players.
+    // Create priority queue sortedPlayers of all players based on their skill levels (max first).
     PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<>(
         Comparator.comparing(IPlayer::getSkillLevel).reversed());
     for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
@@ -147,6 +146,9 @@ private ArrayList<IPlayer> startingLineup;
     }
 
     // Create priority queues (max) of all Goalies, and move them from sortedPlayers to here.
+    // Goalies will be removed from sortedPlayers because the goalie should be played by goalie
+    // as long as there is a goalie on team, and other positions should not be substituted by
+    // Goalie unless players are not enough.
     PriorityQueue<IPlayer> goalies = new PriorityQueue<>(
         Comparator.comparing(IPlayer::getSkillLevel).reversed());
     for (IPlayer player : sortedPlayers) {
@@ -156,109 +158,101 @@ private ArrayList<IPlayer> startingLineup;
       }
     }
 
-    // Each time wipe the previous starting lineup and create a new one.
-    startingLineup = new ArrayList<>();
-
     // Select the highest skilled Goalie (if exists in goalies' PriorityQueue).
     if ( goalies.size() >= 1 ) {
       IPlayer goalie = goalies.peek();
       startingLineup.add(goalie);
       goalie.setActualPosition(Position.GOALIE);
     }
-
     // Select the other 6 players in the starting lineup.
+    // If there are less than 6 players left after removing Goalies, shorted
+    // position should be substituted with the highest ranking goalie left.
+    while ( sortedPlayers.size() < 6 ) {
+      sortedPlayers.add(goalies.poll());
+    }
     ArrayList<IPlayer> otherSixLineups = new ArrayList<>();
-    while ( otherSixLineups.size() < 6 ) {
+    while (otherSixLineups.size() < 6) {
       otherSixLineups.add(sortedPlayers.poll());
     }
-
     // Select the defenders for starting lineup.
-    ArrayList<Integer> defendersIndex = new ArrayList<>();
-    for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      IPlayer player = otherSixLineups.get(i);
+    ArrayList<IPlayer> startingDefendersTemp = new ArrayList<>();
+    for ( IPlayer player : otherSixLineups ) {
       Position position = player.getPreferredPosition();
-      while ( defendersIndex.size() < 2 ) {
-        if (position == Position.DEFENDER) {
-          startingLineup.add(player);
-          player.setActualPosition(Position.DEFENDER);
-          defendersIndex.add(i);
-        }
+      if ( position == Position.DEFENDER ) {
+        startingDefendersTemp.add(player);
       }
     }
-    if ( defendersIndex.size() > 0 ) {
-      for (int index : defendersIndex) {
-        otherSixLineups.remove(index);
+    int countDefenders = 0;
+    for ( IPlayer player : startingDefendersTemp ) {
+      if ( countDefenders < 2 ) {
+        startingLineup.add(player);
+        player.setActualPosition(Position.DEFENDER);
+        otherSixLineups.remove(player);
+        countDefenders++;
       }
     }
-
     // Select the midfielders for starting lineup.
-    ArrayList<Integer> midfieldersIndex = new ArrayList<>();
-    for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      IPlayer player = otherSixLineups.get(i);
+    ArrayList<IPlayer> startingMidfieldersTemp = new ArrayList<>();
+    for ( IPlayer player : otherSixLineups ) {
       Position position = player.getPreferredPosition();
-      while ( midfieldersIndex.size() < 3 ) {
-        if (position == Position.MIDFIELDER) {
-          startingLineup.add(player);
-          player.setActualPosition(Position.MIDFIELDER);
-          midfieldersIndex.add(i);
-        }
+      if (position == Position.MIDFIELDER) {
+        startingMidfieldersTemp.add(player);
       }
     }
-    if ( midfieldersIndex.size() > 0 ) {
-      for (int index : midfieldersIndex) {
-        otherSixLineups.remove(index);
+    int countMidfielders = 0;
+    for ( IPlayer player : startingMidfieldersTemp ) {
+      if ( countMidfielders < 3 ) {
+        startingLineup.add(player);
+        player.setActualPosition(Position.MIDFIELDER);
+        otherSixLineups.remove(player);
+        countMidfielders++;
       }
     }
-
     // Select the forward for starting lineup.
-    ArrayList<Integer> forwardIndex = new ArrayList<>();
-    for ( int i = 0; i < otherSixLineups.size(); i++ ){
-      IPlayer player = otherSixLineups.get(i);
+    ArrayList<IPlayer> startingForwardsTemp = new ArrayList<>();
+    for ( IPlayer player : otherSixLineups ) {
       Position position = player.getPreferredPosition();
-      while ( forwardIndex.size() < 1 ) {
-        if (position == Position.FORWARD) {
-          startingLineup.add(player);
-          player.setActualPosition(Position.FORWARD);
-          forwardIndex.add(i);
-        }
+      if (position == Position.FORWARD) {
+        startingForwardsTemp.add(player);
       }
     }
-    if ( forwardIndex.size() > 0 ) {
-      for (int index : forwardIndex) {
-        otherSixLineups.remove(index);
+    int countForwards = 0;
+    for ( IPlayer player : startingForwardsTemp ) {
+      if ( countForwards < 1 ) {
+        startingLineup.add(player);
+        player.setActualPosition(Position.FORWARD);
+        otherSixLineups.remove(player);
+        countForwards++;
       }
     }
 
     // Check if the starting lineup has been properly selected.
     // Make up for shorted goalie first (if any).
-    if ( goalies.size() < 1 ) {
+    if (goalies.size() < 1) {
       IPlayer switchedGoalie = sortedPlayers.poll();
       startingLineup.add(switchedGoalie);
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
     // Make up for other shorted positions (if any).
-    if ( otherSixLineups.size() > 0 ) {
+    if (otherSixLineups.size() > 0) {
       // Make up for shorted defenders (if any).
-      if ( defendersIndex.size() < 2 ) {
-        int neededDefenders = 2 - defendersIndex.size();
-        for ( int i = 0; i < neededDefenders; i++ ){
-          IPlayer switchedDefender = otherSixLineups.remove(0);
-          startingLineup.add(switchedDefender);
-          switchedDefender.setActualPosition(Position.DEFENDER);
-        }
+      while ( startingDefendersTemp.size() < 2 ) {
+        IPlayer switchedDefender = otherSixLineups.remove(0);
+        startingDefendersTemp.add(switchedDefender);
+        startingLineup.add(switchedDefender);
+        switchedDefender.setActualPosition(Position.DEFENDER);
       }
       // Make up for shorted midfielders (if any).
-      if ( midfieldersIndex.size() < 3 ) {
-        int neededMidfielders = 3 - midfieldersIndex.size();
-        for ( int i = 0; i < neededMidfielders; i++ ){
-          IPlayer switchedMidfielder = otherSixLineups.remove(0);
-          startingLineup.add(switchedMidfielder);
-          switchedMidfielder.setActualPosition(Position.MIDFIELDER);
-        }
+      while ( startingMidfieldersTemp.size() < 3 ) {
+        IPlayer switchedMidfielder = otherSixLineups.remove(0);
+        startingMidfieldersTemp.add(switchedMidfielder);
+        startingLineup.add(switchedMidfielder);
+        switchedMidfielder.setActualPosition(Position.MIDFIELDER);
       }
       // Make up for shorted forward (if any).
-      if ( forwardIndex.size() < 1 ) {
+      while ( startingForwardsTemp.size() < 1 ) {
         IPlayer switchedForward = otherSixLineups.remove(0);
+        startingForwardsTemp.add(switchedForward);
         startingLineup.add(switchedForward);
         switchedForward.setActualPosition(Position.FORWARD);
       }
