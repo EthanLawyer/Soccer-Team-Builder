@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -151,17 +150,20 @@ private ArrayList<IPlayer> startingLineup;
     // Goalie unless players are not enough.
     TreeSet<IPlayer> goalies = new TreeSet<>(
         Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getJerseyNumber));
-    for (IPlayer player : sortedPlayers) {
-      if (player.getPreferredPosition() == Position.GOALIE) {
+    for ( IPlayer player : sortedPlayers ) {
+      if ( player.getPreferredPosition() == Position.GOALIE ) {
         goalies.add(player);
-        sortedPlayers.remove(player);
       }
+    }
+    for ( IPlayer player : goalies ) {
+      sortedPlayers.remove(player);
     }
 
     // Select the highest skilled Goalie (if exists in goalies' PriorityQueue).
     if ( goalies.size() >= 1 ) {
       IPlayer goalie = goalies.first();
       goalie.setActualPosition(Position.GOALIE);
+      startingLineup.add(goalie);
     }
     // Select the other 6 players in the starting lineup.
     // If there are less than 6 players left after removing Goalies, shorted
@@ -170,7 +172,7 @@ private ArrayList<IPlayer> startingLineup;
       sortedPlayers.add(goalies.pollFirst());
     }
     ArrayList<IPlayer> otherSixLineups = new ArrayList<>();
-    while (otherSixLineups.size() < 6) {
+    while ( otherSixLineups.size() < 6 ) {
       otherSixLineups.add(sortedPlayers.pollFirst());
     }
     // Select the defenders for starting lineup.
@@ -284,19 +286,28 @@ private ArrayList<IPlayer> startingLineup;
         break;
       }
     }
+    ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
     for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.DEFENDER ) {
-        result.append(player);
-        playerList.remove(player);
+        result.append("\n").append(player);
+        toBeRemoved.add(player);
       }
     }
+    for ( IPlayer player : toBeRemoved ) {
+      playerList.remove(player);
+    }
+    toBeRemoved.clear();
     for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.MIDFIELDER ) {
-        result.append(player);
-        playerList.remove(player);
+        result.append("\n").append(player);
+        toBeRemoved.add(player);
       }
     }
-    result.append(playerList.get(0));
+    for ( IPlayer player : toBeRemoved ) {
+      playerList.remove(player);
+    }
+    toBeRemoved.clear();
+    result.append("\n").append(playerList.get(0));
     return result.toString();
   }
 }
