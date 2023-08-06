@@ -266,7 +266,7 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
-  public String getAllPlayers() {
+  public String getAllPlayersText() {
     ArrayList<IPlayer> playerList = new ArrayList<>(teamPlayers.values());
     playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();

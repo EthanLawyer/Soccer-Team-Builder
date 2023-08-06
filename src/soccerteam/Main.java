@@ -61,7 +61,7 @@ public class Main {
 
     // Print the whole team.
     System.out.println("The current team members:");
-    System.out.println(team.getAllPlayers());
+    System.out.println(team.getAllPlayersText());
 
     // Remove player9 (Gustavo Fring) from the team, and add the player22 (Elon Musk) to the team,
     // then print the updated team members.
@@ -69,7 +69,7 @@ public class Main {
     team.removePlayer(jersey);
     team.addPlayer(player22);
     System.out.println("The current team members (after removing Gustavo Fring and adding Elon Musk):");
-    System.out.println(team.getAllPlayers());
+    System.out.println(team.getAllPlayersText());
 
     // Print the starting lineup (has not selected yet).
     System.out.println("The current starting lineup (not selected yet):");

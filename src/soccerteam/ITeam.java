@@ -60,7 +60,7 @@ public interface ITeam {
    * Gets all the players on this team.
    * @return a string
    */
-  String getAllPlayers();
+  String getAllPlayersText();
 
 
   /**
