@@ -48,8 +48,9 @@ public interface SoccerTeam {
   /**
    * Selects the starting lineup of 7 players. The most skilled 7 players
    * will be selected. If possible, these players will be assigned their
-   * preferred positions, but not necessary. However, the Goalie always
-   * remains the Goalie.
+   * preferred positions, but not necessary. However, the goalie should be
+   * played by Goalie as long as there is a Goalie on team, and other positions
+   * should not be substituted by Goalie unless players are not enough.
    * @throws IllegalStateException when the team is not valid yet
    */
   void selectStartingLineup() throws IllegalStateException;
