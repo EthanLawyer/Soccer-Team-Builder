@@ -272,6 +272,9 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public String getStartingLineup() {
+    if ( startingLineup.size() == 0 ) {
+      return "The starting lineup has not been selected.";
+    }
     ArrayList<IPlayer> playerList = new ArrayList<>(startingLineup);
     playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();
