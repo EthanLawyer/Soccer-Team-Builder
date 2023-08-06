@@ -77,8 +77,9 @@ public interface IPlayer {
    * Sets the actual position of a player. This will only be set when this player
    * is on the starting lineup.
    * @param   position   this player's assigned position on court
+   * @throws  IllegalStateException   when this player is not on team
    */
-  void setActualPosition(Position position);
+  void setActualPosition(Position position) throws IllegalStateException;
 
 
   /**
