@@ -79,8 +79,12 @@ public class Player implements IPlayer {
   }
 
   @Override
-  public void setActualPosition(Position position) {
-   actualPosition = position;
+  public void setActualPosition(Position position) throws IllegalStateException{
+   if ( jerseyNumber != -1 ) {
+     actualPosition = position;
+   } else {
+     throw new IllegalStateException("Error. A player should be in team to have actual position.");
+   }
   }
 
   @Override
