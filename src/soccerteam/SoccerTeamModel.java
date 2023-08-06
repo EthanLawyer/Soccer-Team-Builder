@@ -1,5 +1,7 @@
 package soccerteam;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,10 +19,11 @@ private ArrayList<IPlayer> startingLineup;
   /**
    * Constructor.
    * Players will be a hashmap, where keys are jersey numbers, and values
-   * are IPlayer objects. If there are less than 10 players, the user will
-   * be informed that the team cannot be created unless more players are
-   * added. If the team has more than 20 players, the ones with the lowest
-   * skill level must be ignored so that we only have 20 players.
+   * are IPlayer objects.
+   * If there are less than 10 players, team cannot be created. If the team
+   * has more than 20 players, the ones with the lowest skill level will be
+   * ignored so that we only have 20 players.
+   * Any player that is not under 10 years of age will be ignored.
    * @param   teamName  the name of this team
    * @param   players   a list of IPlayer objects
    * @throws  IllegalArgumentException  when inputted less than 10 players
@@ -32,6 +35,13 @@ private ArrayList<IPlayer> startingLineup;
     if ( players.size() < 10 ) {
       throw new IllegalArgumentException("Error. At least 10 players are "
                                         + "needed. Please add more.");
+    }
+    // Any player that is not under 10 years old will be ignored.
+    for ( IPlayer player : players ) {
+      int age = Period.between(player.getDateOfBirth(), LocalDate.now()).getYears();
+      if ( age >= 10 ) {
+        players.remove(player);
+      }
     }
     // If more than 20 players, the least skilled ones will be ignored.
     if ( players.size() > 20 ) {
