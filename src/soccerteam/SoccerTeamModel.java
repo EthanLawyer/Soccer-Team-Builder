@@ -63,7 +63,7 @@ private ArrayList<IPlayer> startingLineup;
       teamPlayers.put(jersey,addedPlayer);
     }
     this.teamName = teamName;
-    this.teamSize = 0;
+    this.teamSize = teamPlayers.size();
     this.startingLineup = new ArrayList<>();
   }
 
@@ -137,20 +137,20 @@ private ArrayList<IPlayer> startingLineup;
     // Each time wipe the previous starting lineup and create a new one.
     startingLineup = new ArrayList<>();
 
-    // Create priority queue sortedPlayers of all players based on their skill levels (max first).
-    PriorityQueue<IPlayer> sortedPlayers = new PriorityQueue<>(
-        Comparator.comparing(IPlayer::getSkillLevel).reversed());
+    // Create a TreeSet sortedPlayers of all players based on their skill levels (max first).
+    TreeSet<IPlayer> sortedPlayers = new TreeSet<>(
+        Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getJerseyNumber));
     for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
       IPlayer player = entry.getValue();
       sortedPlayers.add(player);
     }
 
-    // Create priority queues (max) of all Goalies, and move them from sortedPlayers to here.
+    // Create TreeSet (max) of all Goalies, and move them from sortedPlayers to here.
     // Goalies will be removed from sortedPlayers because the goalie should be played by goalie
     // as long as there is a goalie on team, and other positions should not be substituted by
     // Goalie unless players are not enough.
-    PriorityQueue<IPlayer> goalies = new PriorityQueue<>(
-        Comparator.comparing(IPlayer::getSkillLevel).reversed());
+    TreeSet<IPlayer> goalies = new TreeSet<>(
+        Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getJerseyNumber));
     for (IPlayer player : sortedPlayers) {
       if (player.getPreferredPosition() == Position.GOALIE) {
         goalies.add(player);
@@ -160,19 +160,18 @@ private ArrayList<IPlayer> startingLineup;
 
     // Select the highest skilled Goalie (if exists in goalies' PriorityQueue).
     if ( goalies.size() >= 1 ) {
-      IPlayer goalie = goalies.peek();
-      startingLineup.add(goalie);
+      IPlayer goalie = goalies.first();
       goalie.setActualPosition(Position.GOALIE);
     }
     // Select the other 6 players in the starting lineup.
     // If there are less than 6 players left after removing Goalies, shorted
     // position should be substituted with the highest ranking goalie left.
     while ( sortedPlayers.size() < 6 ) {
-      sortedPlayers.add(goalies.poll());
+      sortedPlayers.add(goalies.pollFirst());
     }
     ArrayList<IPlayer> otherSixLineups = new ArrayList<>();
     while (otherSixLineups.size() < 6) {
-      otherSixLineups.add(sortedPlayers.poll());
+      otherSixLineups.add(sortedPlayers.pollFirst());
     }
     // Select the defenders for starting lineup.
     ArrayList<IPlayer> startingDefendersTemp = new ArrayList<>();
@@ -229,7 +228,7 @@ private ArrayList<IPlayer> startingLineup;
     // Check if the starting lineup has been properly selected.
     // Make up for shorted goalie first (if any).
     if (goalies.size() < 1) {
-      IPlayer switchedGoalie = sortedPlayers.poll();
+      IPlayer switchedGoalie = sortedPlayers.pollFirst();
       startingLineup.add(switchedGoalie);
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
