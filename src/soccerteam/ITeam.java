@@ -3,7 +3,7 @@ package soccerteam;
 /**
  * A soccer team.
  */
-public interface SoccerTeam {
+public interface ITeam {
   /**
    * Gets the name of this team.
    * @return a string
