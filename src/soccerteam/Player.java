@@ -21,7 +21,7 @@ public class Player implements IPlayer {
   public Player(String fistName, String lastName, LocalDate dateOfBirth,
             Position preferredPosition, int skillLevel)
   {
-    if ( skillLevel <= 0 || skillLevel >= 5 ) {
+    if ( skillLevel <= 0 || skillLevel > 5 ) {
       throw new IllegalArgumentException("Error. Skill level must be an int within 1 and 5.");
     }
     this.fistName = fistName;
