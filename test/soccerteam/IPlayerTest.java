@@ -1,10 +1,9 @@
 package soccerteam;
-import java.time.LocalDate;
-import static org.junit.Assert.assertEquals;
 
-import org.hamcrest.Condition.Step;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import java.time.LocalDate;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test suite for IPlayer.
@@ -36,11 +35,11 @@ public class IPlayerTest {
    */
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidSkillLevel1(){
-    IPlayer playernew = new Player("Kevin", "Durant", LocalDate.of(2016, 7, 1), Position.GOALIE, 7);
+    new Player("Kevin", "Durant", LocalDate.of(2016, 7, 1), Position.GOALIE, 7);
   }
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidSkillLevel2(){
-    IPlayer playernew = new Player("Kevin", "Durant", LocalDate.of(2016, 7, 1), Position.GOALIE, 0);
+    new Player("Kevin", "Durant", LocalDate.of(2016, 7, 1), Position.GOALIE, 0);
   }
 
   /**
