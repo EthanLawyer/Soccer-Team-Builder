@@ -82,6 +82,11 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
+  public HashMap<Integer, IPlayer> getTeamPlayers() {
+    return teamPlayers;
+  }
+
+  @Override
   public boolean isValidTeam() {
     return teamSize >= 10 && teamSize <= 20;
   }
