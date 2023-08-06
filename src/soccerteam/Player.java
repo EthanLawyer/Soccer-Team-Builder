@@ -96,9 +96,9 @@ public class Player implements IPlayer {
    */
   @Override
   public String toString(){
-    String result = fistName + " " + lastName + " (" + jerseyNumber + ")";
+    String result = "Name: " + fistName + " " + lastName + "\nJersey Number: " + jerseyNumber;
     if ( actualPosition != Position.BENCH ){
-      result = result + ", " + actualPosition.toString();
+      result = result + "\nPosition: " + actualPosition.toString();
     }
     return result;
   }
