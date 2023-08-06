@@ -36,12 +36,17 @@ private ArrayList<IPlayer> startingLineup;
                                         + "needed. Please add more.");
     }
     // Any player that is not under 10 years old will be ignored.
+    ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
     for ( IPlayer player : players ) {
       int age = Period.between(player.getDateOfBirth(), LocalDate.now()).getYears();
       if ( age >= 10 ) {
-        players.remove(player);
+        toBeRemoved.add(player);
       }
     }
+    for ( IPlayer player : toBeRemoved ) {
+      players.remove(player);
+    }
+
     // If more than 20 players, the least skilled ones will be ignored.
     if ( players.size() > 20 ) {
       int redundant = players.size() - 20;
