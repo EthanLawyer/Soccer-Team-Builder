@@ -282,7 +282,7 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
-  public String getStartingLineup() {
+  public String getStartingLineupText() {
     if ( startingLineup.size() == 0 ) {
       return "The starting lineup has not been selected.";
     }

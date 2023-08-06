@@ -73,13 +73,13 @@ public class Main {
 
     // Print the starting lineup (has not selected yet).
     System.out.println("The current starting lineup (not selected yet):");
-    System.out.println(team.getStartingLineup());
+    System.out.println(team.getStartingLineupText());
 
     // Select the starting lineup.
     team.selectStartingLineup();
 
     // Print the starting lineup (now it's selected).
     System.out.println("\nThe current starting lineup (after selected):");
-    System.out.println(team.getStartingLineup());
+    System.out.println(team.getStartingLineupText());
   }
 }

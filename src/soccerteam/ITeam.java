@@ -77,5 +77,5 @@ public interface ITeam {
    * Gets the starting lineup of this team.
    * @return a string
    */
-  String getStartingLineup();
+  String getStartingLineupText();
 }
