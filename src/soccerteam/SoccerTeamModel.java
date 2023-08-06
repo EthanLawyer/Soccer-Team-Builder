@@ -95,9 +95,13 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
-  public void addPlayer(IPlayer player) throws IllegalStateException {
+  public void addPlayer(IPlayer player) throws IllegalStateException, IllegalArgumentException {
     if ( teamSize >= 20 ){
       throw new IllegalStateException("Error. Team is already full.");
+    }
+    int age = Period.between(player.getDateOfBirth(), LocalDate.now()).getYears();
+    if ( age >= 10 ) {
+      throw new IllegalArgumentException("Error. The player must be under 10 years old.");
     }
     int newJerseyNumber = generateJerseyNumber();
     while ( teamPlayers.containsKey(newJerseyNumber) ) {

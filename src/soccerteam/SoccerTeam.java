@@ -1,10 +1,7 @@
 package soccerteam;
 
 /**
- * A soccer team. A team have a minimum of 10 Players and a maximum of 20.
- * If there are less than 10 players, the team cannot be created unless more
- * players are added. If the team has more than 20 players, the ones with
- * the lowest skill level will be ignored so that we only have 20 players.
+ * A soccer team.
  */
 public interface SoccerTeam {
   /**
@@ -32,9 +29,10 @@ public interface SoccerTeam {
   /**
    * Adds a Player to this team.
    * @param    player    an IPlayer object
+   * @throws  IllegalArgumentException  when the player is not under 10 years old
    * @throws  IllegalStateException   when the team is full
    */
-  void addPlayer(IPlayer player) throws IllegalStateException;
+  void addPlayer(IPlayer player) throws IllegalStateException, IllegalArgumentException;
 
 
   /**
