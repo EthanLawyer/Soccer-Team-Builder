@@ -91,10 +91,6 @@ private ArrayList<IPlayer> startingLineup;
     return startingLineup;
   }
 
-  @Override
-  public boolean isValidTeam() {
-    return teamSize >= 10 && teamSize <= 20;
-  }
 
   /**
    * Generates a random jersey number between 1 and 20.

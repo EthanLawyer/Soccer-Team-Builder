@@ -37,14 +37,6 @@ public interface ITeam {
 
 
   /**
-   * Returns whether this team has valid number of Players. A team is valid when
-   * there are no less than 10 players and no more than 20 players.
-   * @return boolean
-   */
-  boolean isValidTeam();
-
-
-  /**
    * Adds a Player to this team.
    * @param    player    an IPlayer object
    * @throws  IllegalArgumentException  when the player is not under 10 years old

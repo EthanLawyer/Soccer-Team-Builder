@@ -2,7 +2,6 @@ package soccerteam;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -101,7 +100,6 @@ public class ITeamTest {
 
     assertEquals("Vancouver U10", team.getName());
     assertEquals(20, team.getSize());
-    assertTrue(team.isValidTeam());
     assertEquals(new ArrayList<>(), team.getStartingLineup());
 
     int countIgnored = 0;
