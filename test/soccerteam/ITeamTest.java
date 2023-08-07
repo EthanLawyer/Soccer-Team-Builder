@@ -1,11 +1,14 @@
 package soccerteam;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
-import java.time.LocalDate;
 
 /**
  * Test suite for ITeam.
@@ -93,20 +96,20 @@ public class ITeamTest {
     players.add(player22);
 
     // Create a team using the list of 22 players, the lowest one (Jamie Oliver)
-    // and the over 10 year old one (Joe Johnson) will be ignored.
+    // and the over 10-year-old one (Joe Johnson) will be ignored.
     ITeam team = new Team("Vancouver U10", players);
 
     assertEquals("Vancouver U10", team.getName());
     assertEquals(20, team.getSize());
-    assertEquals(true, team.isValidTeam());
+    assertTrue(team.isValidTeam());
     assertEquals(new ArrayList<>(), team.getStartingLineup());
 
     int countIgnored = 0;
     for ( IPlayer player : team.getTeamPlayers().values() ) {
-      if ( (player.getFirstName() == player10.getFirstName() &&
-            player.getLastName() == player10.getLastName())
-        ||  (player.getFirstName() == player15.getFirstName() &&
-            player.getLastName() == player15.getLastName()))
+      if ( (Objects.equals(player.getFirstName(), player10.getFirstName()) &&
+            Objects.equals(player.getLastName(), player10.getLastName()))
+        ||  (Objects.equals(player.getFirstName(), player15.getFirstName()) &&
+            Objects.equals(player.getLastName(), player15.getLastName())))
       {
         countIgnored++;
       }
@@ -131,7 +134,7 @@ public class ITeamTest {
     players.add(player8);
     players.add(player9);
 
-    ITeam team = new Team("Vancouver U10", players);
+    new Team("Vancouver U10", players);
   }
 
   /**
@@ -156,7 +159,7 @@ public class ITeamTest {
 
     team.addPlayer(player12);
     assertEquals(11, team.getSize());
-    assertEquals(false, player12.getJerseyNumber()==-1);
+    assertNotEquals(-1, player12.getJerseyNumber());
   }
 
   /**
@@ -432,7 +435,7 @@ public class ITeamTest {
    * Test getAllPlayersText method.
    */
   @Test
-  public void testgetAllPlayersText(){
+  public void testGetAllPlayersText(){
     // Create a list of 10 players.
     ArrayList<IPlayer> players = new ArrayList<>();
     players.add(player1);
@@ -458,7 +461,7 @@ public class ITeamTest {
    * Test the getStartingLineupText method.
    */
   @Test
-  public void testgetStartingLineupText(){
+  public void testGetStartingLineupText(){
     // Create a list of the first 17 players.
     ArrayList<IPlayer> players = new ArrayList<>();
     players.add(player1);
