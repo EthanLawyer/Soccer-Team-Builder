@@ -28,10 +28,5 @@ public enum Position {
       return "Forward";
     }
   },
-  BENCH {
-    @Override
-    public String toString() {
-      return "Bench";
-    }
-  }
+  BENCH {}
 }

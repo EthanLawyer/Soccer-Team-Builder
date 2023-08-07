@@ -174,9 +174,9 @@ private ArrayList<IPlayer> startingLineup;
       sortedPlayers.remove(player);
     }
 
-    // Select the highest skilled Goalie (if exists in goalies' PriorityQueue).
+    // Select the highest skilled Goalie (if exists).
     if ( goalies.size() >= 1 ) {
-      IPlayer goalie = goalies.first();
+      IPlayer goalie = goalies.pollFirst();
       goalie.setActualPosition(Position.GOALIE);
       startingLineup.add(goalie);
     }
