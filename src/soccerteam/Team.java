@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.TreeSet;
 
 public class Team implements ITeam {
-private String teamName;
+private final String teamName;
 private int teamSize;
 private HashMap<Integer, IPlayer> teamPlayers;
 private ArrayList<IPlayer> startingLineup;
@@ -177,6 +177,7 @@ private ArrayList<IPlayer> startingLineup;
     // Select the highest skilled Goalie (if exists).
     if ( goalies.size() >= 1 ) {
       IPlayer goalie = goalies.pollFirst();
+      assert goalie != null;
       goalie.setActualPosition(Position.GOALIE);
       startingLineup.add(goalie);
     }
@@ -247,6 +248,7 @@ private ArrayList<IPlayer> startingLineup;
     if (goalies.size() < 1) {
       IPlayer switchedGoalie = sortedPlayers.pollFirst();
       startingLineup.add(switchedGoalie);
+      assert switchedGoalie != null;
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
     // Make up for other shorted positions (if any).
