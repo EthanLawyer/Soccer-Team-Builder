@@ -9,7 +9,7 @@ public class Player implements IPlayer {
   private final String fistName;
   private final String lastName;
   private final LocalDate dateOfBirth;
-  private Position preferredPosition;
+  private final Position preferredPosition;
   protected int skillLevel;
   private int jerseyNumber;
   protected Position actualPosition;
