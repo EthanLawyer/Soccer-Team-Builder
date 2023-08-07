@@ -30,11 +30,6 @@ private ArrayList<IPlayer> startingLineup;
   public Team(String teamName, ArrayList<IPlayer> players)
       throws IllegalArgumentException
   {
-    // If less than 10 players, a team cannot be created.
-    if ( players.size() < 10 ) {
-      throw new IllegalArgumentException("Error. At least 10 players are "
-                                        + "needed. Please add more.");
-    }
     // Any player that is not under 10 years old will be ignored.
     ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
     for ( IPlayer player : players ) {
@@ -46,6 +41,13 @@ private ArrayList<IPlayer> startingLineup;
     for ( IPlayer player : toBeRemoved ) {
       players.remove(player);
     }
+
+    // If less than 10 players, a team cannot be created.
+    if ( players.size() < 10 ) {
+      throw new IllegalArgumentException("Error. At least 10 players are "
+                                        + "needed. Please add more.");
+    }
+
 
     // If more than 20 players, the least skilled ones will be ignored.
     if ( players.size() > 20 ) {
