@@ -27,46 +27,9 @@ private ArrayList<IPlayer> startingLineup;
    * @throws  IllegalArgumentException  when inputted less than 10 players
    */
   public Team(String teamName) throws IllegalArgumentException {
-    // Any player that is not under 10 years old will be ignored.
-    ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
-    for ( IPlayer player : players ) {
-      int age = Period.between(player.getDateOfBirth(), LocalDate.now()).getYears();
-      if ( age >= 10 ) {
-        toBeRemoved.add(player);
-      }
-    }
-    for ( IPlayer player : toBeRemoved ) {
-      players.remove(player);
-    }
-
-    // If less than 10 players, a team cannot be created.
-    if ( players.size() < 10 ) {
-      throw new IllegalArgumentException("Error. At least 10 players are "
-                                        + "needed. Please add more.");
-    }
-
-
-    // If more than 20 players, the least skilled ones will be ignored.
-    if ( players.size() > 20 ) {
-      int redundant = players.size() - 20;
-      players.sort(Comparator.comparing(IPlayer::getSkillLevel));
-      players.subList(0, redundant).clear();
-    }
-    // When number of players is valid, we assign jersey numbers for players,
-    // and store them in a treeset to avoid duplication.
-    TreeSet<Integer> jerseyNumbers = new TreeSet<>();
-    while ( jerseyNumbers.size() < players.size() ) {
-      jerseyNumbers.add(generateJerseyNumber());
-    }
-    // After generating jersey numbers, add each player to the teamPlayers hashmap.
-    this.teamPlayers = new HashMap<>();
-    for ( int jersey : jerseyNumbers ) {
-      IPlayer addedPlayer = players.remove(0);
-      addedPlayer.setJerseyNumber(jersey);
-      teamPlayers.put(jersey,addedPlayer);
-    }
     this.teamName = teamName;
     this.teamSize = teamPlayers.size();
+    this.teamPlayers = new HashMap<>();
     this.startingLineup = new ArrayList<>();
   }
 
@@ -154,9 +117,8 @@ private ArrayList<IPlayer> startingLineup;
   public void removePlayer(int jerseyNumber) throws IllegalStateException,
                                                     IllegalArgumentException
   {
-    if ( teamSize == 10 ) {
-      throw new IllegalStateException("Error. Only 10 players left, cannot "
-                                    + "remove any player.");
+    if ( teamSize <= 10 ) {
+      throw new IllegalStateException("Error. No more than 10 players left, cannot remove any player.");
     }
     if ( teamPlayers.containsKey(jerseyNumber) ) {
       teamPlayers.remove(jerseyNumber);
@@ -168,8 +130,7 @@ private ArrayList<IPlayer> startingLineup;
         }
       }
     } else {
-      throw new IllegalArgumentException("Error. The inputted jersey number "
-                                        + "is not on this team.");
+      throw new IllegalArgumentException("Error. The inputted jersey number is not on this team.");
     }
   }
 
