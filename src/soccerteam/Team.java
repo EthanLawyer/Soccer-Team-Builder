@@ -171,6 +171,10 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public void selectStartingLineup() throws IllegalStateException {
+    // Check if the team has no less than 10 players. If not, throw exception.
+    if ( teamSize < 10 ) {
+      throw new IllegalStateException("Error. Team has less than 10 players, please add more.");
+    }
     // Each time wipe the previous starting lineup and create a new one.
     startingLineup = new ArrayList<>();
 
