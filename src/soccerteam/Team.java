@@ -156,7 +156,7 @@ private ArrayList<IPlayer> startingLineup;
 
     // Create a TreeSet sortedPlayers of all players based on their skill levels (max first).
     TreeSet<IPlayer> sortedPlayers = new TreeSet<>(
-        Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getJerseyNumber));
+        Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
     for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
       IPlayer player = entry.getValue();
       sortedPlayers.add(player);
@@ -167,7 +167,7 @@ private ArrayList<IPlayer> startingLineup;
     // as long as there is a goalie on team, and other positions should not be substituted by
     // Goalie unless players are not enough.
     TreeSet<IPlayer> goalies = new TreeSet<>(
-        Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getJerseyNumber));
+        Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
     for ( IPlayer player : sortedPlayers ) {
       if ( player.getPreferredPosition() == Position.GOALIE ) {
         goalies.add(player);
