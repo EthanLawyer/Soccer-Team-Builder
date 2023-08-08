@@ -36,6 +36,12 @@ public interface ITeam {
   ArrayList<IPlayer> getStartingLineup();
 
 
+  /** Checks if the team is validly created.
+   * @return boolean
+   */
+  boolean isValidTeam();
+
+
   /**
    * Adds a Player to this team.
    * @param     firstName    the first name of the player
