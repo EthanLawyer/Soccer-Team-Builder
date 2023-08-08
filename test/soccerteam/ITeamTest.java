@@ -1,10 +1,14 @@
 package soccerteam;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,55 +17,14 @@ import org.junit.Test;
  * Test suite for ITeam.
  */
 public class ITeamTest {
-  private IPlayer player1;
-  private IPlayer player2;
-  private IPlayer player3;
-  private IPlayer player4;
-  private IPlayer player5;
-  private IPlayer player6;
-  private IPlayer player7;
-  private IPlayer player8;
-  private IPlayer player9;
-  private IPlayer player10;
-  private IPlayer player11;
-  private IPlayer player12;
-  private IPlayer player13;
-  private IPlayer player14;
-  private IPlayer player15;
-  private IPlayer player16;
-  private IPlayer player17;
-  private IPlayer player18;
-  private IPlayer player19;
-  private IPlayer player20;
-  private IPlayer player21;
-  private IPlayer player22;
+  ITeam team;
 
   /**
    * Setup 22 players.
    */
-  @Before public void setUp() {
-    player1 = new Player("John", "Doe", LocalDate.of(2018, 8, 5), Position.GOALIE, 4);
-    player2 = new Player("David", "Finch", LocalDate.of(2017, 5, 5), Position.GOALIE, 3);
-    player3 = new Player("Francis", "Underwood", LocalDate.of(2019, 5, 23), Position.DEFENDER, 4);
-    player4 = new Player("Doug", "Stamper", LocalDate.of(2018, 8, 5), Position.MIDFIELDER, 4);
-    player5 = new Player("Remy", "Danton", LocalDate.of(2018, 6, 15), Position.DEFENDER, 2);
-    player6 = new Player("Walter", "White", LocalDate.of(2015, 1, 22), Position.FORWARD, 5);
-    player7 = new Player("James", "McGill", LocalDate.of(2016, 3, 30), Position.MIDFIELDER, 4);
-    player8 = new Player("Jesse", "Pinkman", LocalDate.of(2014, 11, 25), Position.DEFENDER, 4);
-    player9 = new Player("Gustavo", "Fring", LocalDate.of(2018, 8, 5), Position.FORWARD, 3);
-    player10 = new Player("Joe", "Johnson", LocalDate.of(2010, 12, 11), Position.DEFENDER, 4);
-    player11 = new Player("Zack", "Daniels", LocalDate.of(2017, 10, 19), Position.DEFENDER, 4);
-    player12 = new Player("William", "Lee", LocalDate.of(2016, 7, 1), Position.GOALIE, 3);
-    player13 = new Player("Michael", "Jordan", LocalDate.of(2019, 5, 23), Position.DEFENDER, 4);
-    player14 = new Player("Ming", "Yao", LocalDate.of(2018, 8, 5), Position.MIDFIELDER, 4);
-    player15 = new Player("Jamie", "Oliver", LocalDate.of(2018, 6, 15), Position.DEFENDER, 1);
-    player16 = new Player("James", "Harden", LocalDate.of(2015, 1, 22), Position.FORWARD, 5);
-    player17 = new Player("Derrick", "Rose", LocalDate.of(2016, 3, 30), Position.MIDFIELDER, 4);
-    player18 = new Player("Harvey", "Spector", LocalDate.of(2014, 11, 25), Position.DEFENDER, 4);
-    player19 = new Player("Michael", "Ross", LocalDate.of(2018, 8, 5), Position.GOALIE, 3);
-    player20 = new Player("Louis", "Litt", LocalDate.of(2018, 12, 11), Position.GOALIE, 4);
-    player21 = new Player("William", "Gates", LocalDate.of(2017, 10, 19), Position.GOALIE, 4);
-    player22 = new Player("Elon", "Musk", LocalDate.of(2016, 7, 1), Position.GOALIE, 3);
+  @Before
+  public void setUp() {
+    team = new Team("Vancouver U10");
   }
 
   /**
@@ -69,70 +32,33 @@ public class ITeamTest {
    */
   @Test
   public void testConstructor(){
-    // Create a list of the first 22 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player10); // should be ignored
-    players.add(player11);
-    players.add(player12);
-    players.add(player13);
-    players.add(player14);
-    players.add(player15); // should be ignored
-    players.add(player16);
-    players.add(player17);
-    players.add(player18);
-    players.add(player19);
-    players.add(player20);
-    players.add(player21);
-    players.add(player22);
-
-    // Create a team using the list of 22 players, the lowest one (Jamie Oliver)
-    // and the over 10-year-old one (Joe Johnson) will be ignored.
-    ITeam team = new Team("Vancouver U10", players);
-
     assertEquals("Vancouver U10", team.getName());
-    assertEquals(20, team.getSize());
+    assertEquals(0, team.getSize());
+    assertEquals(new HashMap<>(), team.getTeamPlayers());
     assertEquals(new ArrayList<>(), team.getStartingLineup());
-
-    int countIgnored = 0;
-    for ( IPlayer player : team.getTeamPlayers().values() ) {
-      if ( (Objects.equals(player.getFirstName(), player10.getFirstName()) &&
-            Objects.equals(player.getLastName(), player10.getLastName()))
-        ||  (Objects.equals(player.getFirstName(), player15.getFirstName()) &&
-            Objects.equals(player.getLastName(), player15.getLastName())))
-      {
-        countIgnored++;
-      }
-    }
-    assertEquals(0, countIgnored);
   }
 
   /**
-   * Test the constructor when less than 10 players are inputted.
+   * Test isValidTeam method.
    */
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidConstructor(){
-    // Create a list of 9 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
+  @Test
+  public void testInvalidTeam(){
+    assertFalse(team.isValidTeam());
+    // Add 9 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
 
-    new Team("Vancouver U10", players);
+    assertFalse(team.isValidTeam());
+    // Add another player.
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    assertTrue(team.isValidTeam());
   }
 
   /**
@@ -140,59 +66,117 @@ public class ITeamTest {
    */
   @Test
   public void testAddPlayer(){
-    // Create a list of 10 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
+    // Add 15 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 1);
 
-    ITeam team = new Team("Vancouver U10", players);
+    assertEquals(15, team.getSize());
 
-    team.addPlayer(player12);
-    assertEquals(11, team.getSize());
-    assertNotEquals(-1, player12.getJerseyNumber());
+    int countNotAssignedJersey = 0;
+    for ( int key : team.getTeamPlayers().keySet() ){
+      if ( key == -1 ) {
+        countNotAssignedJersey++;
+      }
+    }
+    assertEquals(0, countNotAssignedJersey);
   }
 
   /**
-   * Test adding player to a full team.
+   * Test adding player to a full team, but the new player is more skilled than the least skilled
+   * player on team.
+   */
+  @Test
+  public void testAddingHighSkillPlayerToFullTeam(){
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 3);
+    team.addPlayer("James", "Harden", "2015-01-22", "forward", 5);
+    team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Michael", "Ross", "2018-08-05", "forward", 3);
+    team.addPlayer("Louis", "Litt", "2018-12-11", "defender", 4);
+    team.addPlayer("William", "Gates", "2017-10-19", "defender", 4);
+
+    // Add a new player to the team, and Jamie Oliver as the least skilled player will be removed.
+    team.addPlayer("Elon", "Musk", "2016-07-01", "goalie", 3);
+
+    assertEquals(20, team.getSize());
+    int hasRemyDanton = 0;
+    String[] allPlayers = team.getAllPlayersText().split("\\n");
+    for ( String player : allPlayers ) {
+      if ( player.contains("Remy Danton") ) {
+        hasRemyDanton++;
+      }
+    }
+    assertEquals(0, hasRemyDanton);
+  }
+
+
+  /**
+   * Test adding player to a full team, but the new player is lower skilled than the least skilled
+   * player on team.
    */
   @Test(expected = IllegalStateException.class)
-  public void testAddingToFullTeam(){
-    // Create a team of 20 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player12);
-    players.add(player13);
-    players.add(player14);
-    players.add(player16);
-    players.add(player17);
-    players.add(player18);
-    players.add(player19);
-    players.add(player20);
-    players.add(player21);
-    players.add(player22);
+  public void testAddingLowSkillPlayerToFullTeam(){
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 2);
+    team.addPlayer("James", "Harden", "2015-01-22", "forward", 5);
+    team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Michael", "Ross", "2018-08-05", "forward", 3);
+    team.addPlayer("Louis", "Litt", "2018-12-11", "defender", 4);
+    team.addPlayer("William", "Gates", "2017-10-19", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
+    // Add a new player to the team, but he is lower skilled than the least skilled player on team, error will be thrown.
+    team.addPlayer("Elon", "Musk", "2016-07-01", "goalie", 1);
+  }
 
-    // add a new player to it
-    IPlayer player23 = new Player("XX", "XXX", LocalDate.of(2010, 12, 11), Position.DEFENDER, 4);
-    team.addPlayer(player23);
+
+  /**
+   * Test adding a player using invalid date of birth format.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddingPlayerInvalidDateFormat() {
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2017-Aug-05", "goalie", 4);
   }
 
 
@@ -201,48 +185,77 @@ public class ITeamTest {
     */
   @Test(expected = IllegalArgumentException.class)
   public void testAddingOverAgePlayer() {
-    // Create a team of 10 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-
-    ITeam team = new Team("Vancouver U10", players);
-
-    // add an overage player
-    team.addPlayer(player10);
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2010-08-05", "goalie", 4);
   }
+
+
+  /**
+   * Test adding a player using invalid preferred position.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddingPlayerInvalidPosition() {
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2017-05-05", "coach", 4);
+  }
+
+
+  /**
+   * Test adding a player using invalid skill level.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddingPlayerInvalidSkillLevel1() {
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2017-05-05", "goalie", 6);
+  }
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddingPlayerInvalidSkillLevel2() {
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2017-05-05", "goalie", 0);
+  }
+
 
   /**
    * Test removePlayer method.
    */
   @Test
   public void testRemovePlayer(){
-    // Create a list of 11 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player12);
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 1);
+    team.addPlayer("James", "Harden", "2015-01-22", "forward", 5);
+    team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Michael", "Ross", "2018-08-05", "forward", 3);
+    team.addPlayer("Louis", "Litt", "2018-12-11", "defender", 4);
+    team.addPlayer("William", "Gates", "2017-10-19", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
     team.selectStartingLineup();
 
-    team.removePlayer(player1.getJerseyNumber());
+    // Remove 10 players.
+    team.removePlayer(1);
+    team.removePlayer(2);
+    team.removePlayer(3);
+    team.removePlayer(4);
+    team.removePlayer(5);
+    team.removePlayer(6);
+    team.removePlayer(7);
+    team.removePlayer(8);
+    team.removePlayer(9);
+    team.removePlayer(10);
+
     assertEquals(10, team.getSize());
   }
 
@@ -251,23 +264,40 @@ public class ITeamTest {
    */
   @Test(expected = IllegalStateException.class)
   public void testRemoveFromATeamOf10Players() {
-    // Create a list of 10 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
+    // Add 20 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 1);
+    team.addPlayer("James", "Harden", "2015-01-22", "forward", 5);
+    team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Michael", "Ross", "2018-08-05", "forward", 3);
+    team.addPlayer("Louis", "Litt", "2018-12-11", "defender", 4);
+    team.addPlayer("William", "Gates", "2017-10-19", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
-
-    // remove player11
-    team.removePlayer(player11.getJerseyNumber());
+    // Remove 11 players.
+    team.removePlayer(1);
+    team.removePlayer(2);
+    team.removePlayer(3);
+    team.removePlayer(4);
+    team.removePlayer(5);
+    team.removePlayer(6);
+    team.removePlayer(7);
+    team.removePlayer(8);
+    team.removePlayer(9);
+    team.removePlayer(10);
+    team.removePlayer(11);
   }
 
 
@@ -276,24 +306,21 @@ public class ITeamTest {
    */
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveNotExistingPlayer() {
-    // Create a list of 11 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player12);
+    // Add 11 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
-
-    // remove a not existing player
-    team.removePlayer(0);
+    // Remove non-existing players.
+    team.removePlayer(22);
   }
 
 
@@ -302,45 +329,59 @@ public class ITeamTest {
    */
   @Test
   public void testSelectStartingLineup(){
-    // Create a list of the first 17 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player12);
-    players.add(player13);
-    players.add(player14);
-    players.add(player15);
-    players.add(player16);
-    players.add(player17);
-    players.add(player18);
+    // Add 17 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 5);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Zack", "Daniels", "2017-10-19", "defender", 4);
+    team.addPlayer("William", "Lee", "2016-07-01", "goalie", 3);
+    team.addPlayer("Michael", "Jordan", "2019-05-23", "defender", 4);
+    team.addPlayer("Ming", "Yao", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 1);
+    team.addPlayer("James", "Harden", "2015-01-22", "forward", 5);
+    team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
     team.selectStartingLineup();
+    assertEquals(7, team.getStartingLineup().size());
 
-    ArrayList<IPlayer> expectedStartingLineup = new ArrayList<>();
-    expectedStartingLineup.add(player1);
-    expectedStartingLineup.add(player3);
-    expectedStartingLineup.add(player4);
-    expectedStartingLineup.add(player6);
-    expectedStartingLineup.add(player7);
-    expectedStartingLineup.add(player8);
-    expectedStartingLineup.add(player16);
-
-    int errorCount = 0;
-    for ( IPlayer player : expectedStartingLineup ) {
-      if ( !team.getStartingLineup().contains(player) ){
-        errorCount++;
+    int hasExpectedStartingLineup = 0;
+    String[] allStartingLineup = team.getStartingLineupText().split("\\n");
+    for ( String player : allStartingLineup ) {
+      if ( player.contains("John Doe") || player.contains("Francis Underwood") || player.contains("Jesse Pinkman")
+          || player.contains("James McGill") || player.contains("Derrick Rose") || player.contains("Walter White")
+          || player.contains("James Harden") )
+      {
+        hasExpectedStartingLineup++;
       }
     }
-    assertEquals(0, errorCount);
+    assertEquals(7, hasExpectedStartingLineup);
+  }
+
+
+  /**
+   * Test selectStartingLineup for an invalid team (9 players).
+   */
+  @Test(expected = IllegalStateException.class)
+  public void testSelectStartingLineupInvalidTeam() {
+    // Add 9 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 5);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+
+    team.selectStartingLineup();
   }
 
 
@@ -349,42 +390,32 @@ public class ITeamTest {
    */
   @Test
   public void testSelectStartingLineupNoGoalie(){
-    // Create a list of no goalie.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player13);
-    players.add(player14);
-    players.add(player15);
-    players.add(player16);
-    players.add(player17);
-    players.add(player18);
+    // Add 10 players with no goalies.
+    team.addPlayer("John", "Doe", "2018-08-05", "forward", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "defender", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
     team.selectStartingLineup();
+    assertEquals(7, team.getStartingLineup().size());
 
-    ArrayList<IPlayer> expectedStartingLineup = new ArrayList<>();
-    expectedStartingLineup.add(player3);
-    expectedStartingLineup.add(player4);
-    expectedStartingLineup.add(player6);
-    expectedStartingLineup.add(player7);
-    expectedStartingLineup.add(player8);
-    expectedStartingLineup.add(player16);
-    expectedStartingLineup.add(player11);
-
-    int errorCount = 0;
-    for ( IPlayer player : expectedStartingLineup ) {
-      if ( !team.getStartingLineup().contains(player) ){
-        errorCount++;
+    int hasExpectedStartingLineup = 0;
+    String[] allStartingLineup = team.getStartingLineupText().split("\\n");
+    for ( String player : allStartingLineup ) {
+      if ( player.contains("Joe Johnson") || player.contains("Doug Stamper") || player.contains("Jesse Pinkman")
+          || player.contains("James McGill") || player.contains("Francis Underwood") || player.contains("Walter White")
+          || player.contains("John Doe") )
+      {
+        hasExpectedStartingLineup++;
       }
     }
-    assertEquals(0, errorCount);
+    assertEquals(7, hasExpectedStartingLineup);
   }
 
 
@@ -393,39 +424,32 @@ public class ITeamTest {
    */
   @Test
   public void testSelectStartingLineupTooManyGoalies(){
-    // Create a list of 10 players, in which 6 are goalies.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1); // goalie
-    players.add(player2); // goalie
-    players.add(player3);
-    players.add(player4);
-    players.add(player12); // goalie
-    players.add(player16);
-    players.add(player19); // goalie
-    players.add(player20); // goalie
-    players.add(player21); // goalie
-    players.add(player22); // goalie
+    // Add 10 players, in which 6 are goalies.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
 
-    ITeam team = new Team("Vancouver U10", players);
     team.selectStartingLineup();
+    assertEquals(7, team.getStartingLineup().size());
 
-    ArrayList<IPlayer> expectedStartingLineup = new ArrayList<>();
-    expectedStartingLineup.add(player1);
-    expectedStartingLineup.add(player2);
-    expectedStartingLineup.add(player3);
-    expectedStartingLineup.add(player4);
-    expectedStartingLineup.add(player16);
-    expectedStartingLineup.add(player20);
-    expectedStartingLineup.add(player21);
-
-
-    int errorCount = 0;
-    for ( IPlayer player : expectedStartingLineup ) {
-      if ( !team.getStartingLineup().contains(player) ){
-        errorCount++;
+    int hasExpectedStartingLineup = 0;
+    String[] allStartingLineup = team.getStartingLineupText().split("\\n");
+    for ( String player : allStartingLineup ) {
+      if ( player.contains("John Doe") || player.contains("Francis Underwood") || player.contains("Jesse Pinkman")
+          || player.contains("James McGill") || player.contains("Joe Johnson") || player.contains("Walter White")
+          || player.contains("Doug Stamper") )
+      {
+        hasExpectedStartingLineup++;
       }
     }
-    assertEquals(0, errorCount);
+    assertEquals(7, hasExpectedStartingLineup);
   }
 
 
@@ -434,20 +458,17 @@ public class ITeamTest {
    */
   @Test
   public void testGetAllPlayersText(){
-    // Create a list of 10 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-
-    ITeam team = new Team("Vancouver U10", players);
+    // Add 10 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
 
     String allPlayers = team.getAllPlayersText();
     String[] lines = allPlayers.split("\r?\n");
@@ -460,27 +481,17 @@ public class ITeamTest {
    */
   @Test
   public void testGetStartingLineupText(){
-    // Create a list of the first 17 players.
-    ArrayList<IPlayer> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
-    players.add(player4);
-    players.add(player5);
-    players.add(player6);
-    players.add(player7);
-    players.add(player8);
-    players.add(player9);
-    players.add(player11);
-    players.add(player12);
-    players.add(player13);
-    players.add(player14);
-    players.add(player15);
-    players.add(player16);
-    players.add(player17);
-    players.add(player18);
-
-    ITeam team = new Team("Vancouver U10", players);
+    // Add 10 players.
+    team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
+    team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
 
     // Test before the starting lineup is selected.
     String lineup = "The starting lineup has not been selected.";
