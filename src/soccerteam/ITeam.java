@@ -43,11 +43,12 @@ public interface ITeam {
    * @param     dateOfBirth  the date of birth of the player, in the format of YYYY-MM-DD
    * @param     preferredPosition   the preferred position of the player, case-insensitive
    * @param     skillLevel   the player's skill level, in int format within 1 and 5 (max 5)
-   * @throws  IllegalArgumentException  when the player is not under 10 years old, or
-   *                                    when the date format is not correct, or
-   *                                    when the preferred position is not valid, or
-   *                                    when the skill level is out of range
-   * @throws  IllegalStateException   when the team is full
+   * @throws  IllegalArgumentException  1. when the player is not under 10 years old, or
+   *                                    2. when the date format is not correct, or
+   *                                    3. when the preferred position is not valid, or
+   *                                    4. when the skill level is out of range
+   * @throws  IllegalStateException   when the team is full and the new players is less skilled
+   *                                  than the least skilled player on team
    */
   void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
       int skillLevel) throws IllegalStateException, IllegalArgumentException;

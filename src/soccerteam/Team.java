@@ -24,12 +24,9 @@ private ArrayList<IPlayer> startingLineup;
    * ignored so that we only have 20 players.
    * Any player that is not under 10 years of age will be ignored.
    * @param   teamName  the name of this team
-   * @param   players   a list of IPlayer objects
    * @throws  IllegalArgumentException  when inputted less than 10 players
    */
-  public Team(String teamName, ArrayList<IPlayer> players)
-      throws IllegalArgumentException
-  {
+  public Team(String teamName) throws IllegalArgumentException {
     // Any player that is not under 10 years old will be ignored.
     ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
     for ( IPlayer player : players ) {
@@ -106,9 +103,16 @@ private ArrayList<IPlayer> startingLineup;
   @Override
   public void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
       int skillLevel) throws IllegalStateException, IllegalArgumentException {
-    // Check if team is already full.
+    // When the team is full, check if the new player has a higher skill level than the least skilled
+    // player on team. If yes, remove the least skilled player and add the new one, otherwise throw error.
     if ( teamSize >= 20 ){
-      throw new IllegalStateException("Error. Team is already full.");
+      ArrayList<IPlayer> sortedPlayers = new ArrayList<>(teamPlayers.values());
+      sortedPlayers.sort(Comparator.comparing(IPlayer::getSkillLevel));
+      if ( skillLevel <= sortedPlayers.get(0).getSkillLevel() ) {
+        throw new IllegalStateException("Error. The team is full.");
+      } else {
+        removePlayer(sortedPlayers.get(0).getJerseyNumber());
+      }
     }
     // Check if the date of birth is in correct format.
     LocalDate birthDate;
