@@ -28,7 +28,7 @@ private ArrayList<IPlayer> startingLineup;
    */
   public Team(String teamName) throws IllegalArgumentException {
     this.teamName = teamName;
-    this.teamSize = teamPlayers.size();
+    this.teamSize = 0;
     this.teamPlayers = new HashMap<>();
     this.startingLineup = new ArrayList<>();
   }
@@ -70,6 +70,7 @@ private ArrayList<IPlayer> startingLineup;
     Random random = new Random();
     return random.nextInt(20) + 1;
   }
+
 
   @Override
   public void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
@@ -121,6 +122,7 @@ private ArrayList<IPlayer> startingLineup;
     teamSize++;
   }
 
+
   @Override
   public void removePlayer(int jerseyNumber) throws IllegalStateException,
                                                     IllegalArgumentException
@@ -141,6 +143,7 @@ private ArrayList<IPlayer> startingLineup;
       throw new IllegalArgumentException("Error. The inputted jersey number is not on this team.");
     }
   }
+
 
   @Override
   public void selectStartingLineup() throws IllegalStateException {
@@ -277,6 +280,7 @@ private ArrayList<IPlayer> startingLineup;
     }
   }
 
+
   @Override
   public String getAllPlayersText() {
     ArrayList<IPlayer> playerList = new ArrayList<>(teamPlayers.values());
@@ -287,6 +291,7 @@ private ArrayList<IPlayer> startingLineup;
     }
     return result.toString();
   }
+
 
   @Override
   public String getStartingLineupText() {
