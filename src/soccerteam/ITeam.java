@@ -38,11 +38,19 @@ public interface ITeam {
 
   /**
    * Adds a Player to this team.
-   * @param    player    an IPlayer object
-   * @throws  IllegalArgumentException  when the player is not under 10 years old
+   * @param     firstName    the first name of the player
+   * @param     lastName     the last name of the player
+   * @param     dateOfBirth  the date of birth of the player, in the format of YYYY-MM-DD
+   * @param     preferredPosition   the preferred position of the player, case-insensitive
+   * @param     skillLevel   the player's skill level, in int format within 1 and 5 (max 5)
+   * @throws  IllegalArgumentException  when the player is not under 10 years old, or
+   *                                    when the date format is not correct, or
+   *                                    when the preferred position is not valid, or
+   *                                    when the skill level is out of range
    * @throws  IllegalStateException   when the team is full
    */
-  void addPlayer(IPlayer player) throws IllegalStateException, IllegalArgumentException;
+  void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
+      int skillLevel) throws IllegalStateException, IllegalArgumentException;
 
 
   /**

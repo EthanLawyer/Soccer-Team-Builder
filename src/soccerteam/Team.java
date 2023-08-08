@@ -104,19 +104,44 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
-  public void addPlayer(IPlayer player) throws IllegalStateException, IllegalArgumentException {
+  public void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
+      int skillLevel) throws IllegalStateException, IllegalArgumentException {
+    // Check if team is already full.
     if ( teamSize >= 20 ){
       throw new IllegalStateException("Error. Team is already full.");
     }
-    int age = Period.between(player.getDateOfBirth(), LocalDate.now()).getYears();
+    // Check if the date of birth is in correct format.
+    LocalDate birthDate;
+    try {
+      birthDate = LocalDate.parse(dateOfBirth);
+    } catch (java.time.format.DateTimeParseException e) {
+      throw new IllegalArgumentException("Error. The date of birth should be in the format of YYYY-MM-DD.");
+    }
+    // Check if the player is over 10.
+    int age = Period.between(birthDate, LocalDate.now()).getYears();
     if ( age >= 10 ) {
       throw new IllegalArgumentException("Error. The player must be under 10 years old.");
     }
+    // Check if the preferred position is valid.
+    Position position;
+    try {
+      position = Position.valueOf(preferredPosition.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Error. Invalid preferred position.");
+    }
+    // Check if the skill level is valid.
+    if ( skillLevel < 1 || skillLevel > 5 ) {
+      throw new IllegalArgumentException("Error. Skill level must be within 1 and 5.");
+    }
+    // Create player.
+    IPlayer player = new Player(firstName, lastName, birthDate, position, skillLevel);
+    // Assign jersey number.
     int newJerseyNumber = generateJerseyNumber();
     while ( teamPlayers.containsKey(newJerseyNumber) ) {
       newJerseyNumber = generateJerseyNumber();
     }
     player.setJerseyNumber(newJerseyNumber);
+    // Add the player to this team.
     teamPlayers.put(newJerseyNumber, player);
     teamSize++;
   }
