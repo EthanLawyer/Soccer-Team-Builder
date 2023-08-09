@@ -37,17 +37,14 @@ public interface IPlayer {
 
   /**
    * Gets the skill level of this player, which is a number between
-   * 1 and 5 based on the coach's assessment (1 = lowest skill level,
-   * 5 = highest skill level).
+   * 1 and 5.
    * @return the skill level of this player
    */
   int getSkillLevel();
 
 
   /**
-   * Gets the jersey number of this player, which is a unique number
-   * between 1 and 20, and cannot be changed once created. The jersey
-   * number is assigned once a team is created.
+   * Gets the jersey number of this player.
    * @return the jersey number of this player
    */
   int getJerseyNumber();
@@ -74,17 +71,18 @@ public interface IPlayer {
 
 
   /**
-   * Sets the actual position of a player. This will only be set when this player
-   * is on the starting lineup.
+   * Sets the actual position of a player. Actual position will be BENCH by default,
+   * and will only be set when this player is on the starting lineup.
    * @param   position   this player's assigned position on court
-   * @throws  IllegalStateException   when this player is not on team
+   * @throws  IllegalStateException   when this player is not on a team
    */
   void setActualPosition(Position position) throws IllegalStateException;
 
 
   /**
    * Sets the jersey number of a player, which is a unique number between 1 and 20, and cannot
-   * be changed once created. The jersey number is assigned once a team is created.
+   * be changed once created. The jersey number will be -1 by default, and is only assigned
+   * when this player is added to a team.
    * @param  number  the assigned jersey number
    * @throws IllegalArgumentException when the jersey number is not valid
    * @throws IllegalStateException when this player already has a jersey number
