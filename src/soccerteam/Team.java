@@ -181,7 +181,6 @@ private ArrayList<IPlayer> startingLineup;
     // Select the highest skilled Goalie (if exists).
     if ( goalies.size() >= 1 ) {
       IPlayer goalie = goalies.pollFirst();
-      assert goalie != null;
       goalie.setActualPosition(Position.GOALIE);
       startingLineup.add(goalie);
     }
