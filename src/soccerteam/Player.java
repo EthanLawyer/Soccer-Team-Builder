@@ -16,6 +16,11 @@ public class Player implements IPlayer {
 
   /**
    * Constructor.
+   * @param     fistName            the first name of this player
+   * @param     lastName            the last name of this player
+   * @param     dateOfBirth         the date of birth of this player
+   * @param     preferredPosition   this player's preferred position
+   * @param     skillLevel          this player's skill level
    * @throws  IllegalArgumentException  when the skill level is not in range
    */
   public Player(String fistName, String lastName, LocalDate dateOfBirth,
