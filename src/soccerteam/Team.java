@@ -72,14 +72,14 @@ private ArrayList<IPlayer> startingLineup;
   public void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
       int skillLevel) throws IllegalStateException, IllegalArgumentException {
     // When the team is full, check if the new player has a higher skill level than the least skilled
-    // player on team. If yes, remove the least skilled player and add the new one, otherwise throw error.
+    // player on team. If yes, remove the least skilled player and add the new one, otherwise do nothing.
     if ( teamSize >= 20 ){
       ArrayList<IPlayer> sortedPlayers = new ArrayList<>(teamPlayers.values());
       sortedPlayers.sort(Comparator.comparing(IPlayer::getSkillLevel));
-      if ( skillLevel <= sortedPlayers.get(0).getSkillLevel() ) {
-        throw new IllegalStateException("Error. The team is full.");
-      } else {
+      if ( skillLevel > sortedPlayers.get(0).getSkillLevel() ) {
         removePlayer(sortedPlayers.get(0).getJerseyNumber());
+      } else {
+        return;
       }
     }
     // Check if the date of birth is in correct format.
@@ -282,7 +282,9 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public String getAllPlayersText() {
+    // Create a new ArrayList to store the sorted players.
     ArrayList<IPlayer> playerList = new ArrayList<>(teamPlayers.values());
+    // Sort all players by last name.
     playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();
     for (IPlayer player : playerList) {
@@ -297,9 +299,12 @@ private ArrayList<IPlayer> startingLineup;
     if ( startingLineup.size() == 0 ) {
       return "The starting lineup has not been selected.";
     }
+    // Create a new ArrayList to store the sorted starting lineup players.
     ArrayList<IPlayer> playerList = new ArrayList<>(startingLineup);
+    // Sort all players by last name.
     playerList.sort(Comparator.comparing(IPlayer::getLastName));
     StringBuilder result = new StringBuilder();
+    // Search for goalie first, append to result, then remove from sorted starting lineup players list.
     for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.GOALIE ) {
         result.append(player);
@@ -307,7 +312,9 @@ private ArrayList<IPlayer> startingLineup;
         break;
       }
     }
+    // Create a separate list for players to be removed, in order to prevent index error.
     ArrayList<IPlayer> toBeRemoved = new ArrayList<>();
+    // Search for defenders, append to result, then remove from sorted starting lineup players list.
     for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.DEFENDER ) {
         result.append("\n").append(player);
@@ -318,6 +325,7 @@ private ArrayList<IPlayer> startingLineup;
       playerList.remove(player);
     }
     toBeRemoved.clear();
+    // Search for midfielders, append to result, then remove from sorted starting lineup players list.
     for ( IPlayer player : playerList ) {
       if ( player.getActualPosition() == Position.MIDFIELDER ) {
         result.append("\n").append(player);
@@ -328,6 +336,7 @@ private ArrayList<IPlayer> startingLineup;
       playerList.remove(player);
     }
     toBeRemoved.clear();
+    // The only one left will be the forward.
     result.append("\n").append(playerList.get(0));
     return result.toString();
   }

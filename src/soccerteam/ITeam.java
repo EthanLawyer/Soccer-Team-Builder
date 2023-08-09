@@ -53,11 +53,9 @@ public interface ITeam {
    *                                    2. when the date format is not correct, or
    *                                    3. when the preferred position is not valid, or
    *                                    4. when the skill level is out of range
-   * @throws  IllegalStateException   when the team is full and the new players is less skilled
-   *                                  than the least skilled player on team
    */
   void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
-      int skillLevel) throws IllegalStateException, IllegalArgumentException;
+      int skillLevel) throws IllegalArgumentException;
 
 
   /**
