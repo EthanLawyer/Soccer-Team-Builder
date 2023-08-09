@@ -2,14 +2,10 @@ package soccerteam;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -349,6 +345,7 @@ public class ITeamTest {
     team.addPlayer("Derrick", "Rose", "2016-03-30", "midfielder", 4);
 
     team.selectStartingLineup();
+    team.selectStartingLineup();
     assertEquals(7, team.getStartingLineup().size());
 
     int hasExpectedStartingLineup = 0;
@@ -424,17 +421,17 @@ public class ITeamTest {
    */
   @Test
   public void testSelectStartingLineupTooManyGoalies(){
-    // Add 10 players, in which 6 are goalies.
+    // Add 10 players, in which 7 are goalies.
     team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
     team.addPlayer("David", "Finch", "2017-05-05", "goalie", 3);
-    team.addPlayer("Francis", "Underwood", "2019-05-23", "defender", 4);
-    team.addPlayer("Doug", "Stamper", "2018-08-05", "midfielder", 4);
-    team.addPlayer("Remy", "Danton", "2018-06-15", "defender", 2);
-    team.addPlayer("Walter", "White", "2015-01-22", "forward", 5);
-    team.addPlayer("James", "McGill", "2016-03-30", "midfielder", 4);
+    team.addPlayer("Francis", "Underwood", "2019-05-23", "goalie", 4);
+    team.addPlayer("Doug", "Stamper", "2018-08-05", "goalie", 4);
+    team.addPlayer("Remy", "Danton", "2018-06-15", "goalie", 2);
+    team.addPlayer("Walter", "White", "2015-01-22", "goalie", 5);
+    team.addPlayer("James", "McGill", "2016-03-30", "goalie", 4);
     team.addPlayer("Jesse", "Pinkman", "2014-11-25", "defender", 4);
-    team.addPlayer("Gustavo", "Fring", "2018-08-05", "forward", 3);
-    team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
+    team.addPlayer("Gustavo", "Fring", "2018-08-05", "midfielder", 3);
+    team.addPlayer("Joe", "Johnson", "2018-12-11", "midfielder", 4);
 
     team.selectStartingLineup();
     assertEquals(7, team.getStartingLineup().size());
@@ -442,7 +439,7 @@ public class ITeamTest {
     int hasExpectedStartingLineup = 0;
     String[] allStartingLineup = team.getStartingLineupText().split("\\n");
     for ( String player : allStartingLineup ) {
-      if ( player.contains("John Doe") || player.contains("Francis Underwood") || player.contains("Jesse Pinkman")
+      if ( player.contains("John Doe") || player.contains("Gustavo Fring") || player.contains("Jesse Pinkman")
           || player.contains("James McGill") || player.contains("Joe Johnson") || player.contains("Walter White")
           || player.contains("Doug Stamper") )
       {
