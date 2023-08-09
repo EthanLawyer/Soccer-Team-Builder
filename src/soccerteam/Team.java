@@ -154,6 +154,7 @@ private ArrayList<IPlayer> startingLineup;
     startingLineup = new ArrayList<>();
 
     // Create a TreeSet sortedPlayers of all players based on their skill levels (max first).
+    // Tie-breaking rule: If same skill level, youngest first; if same age, last name order.
     TreeSet<IPlayer> sortedPlayers = new TreeSet<>(
         Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
     for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
@@ -165,6 +166,7 @@ private ArrayList<IPlayer> startingLineup;
     // Goalies will be removed from sortedPlayers because the goalie should be played by goalie
     // as long as there is a goalie on team, and other positions should not be substituted by
     // Goalie unless players are not enough.
+    // Tie-breaking rule: If same skill level, youngest first; if same age, last name order.
     TreeSet<IPlayer> goalies = new TreeSet<>(
         Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
     for ( IPlayer player : sortedPlayers ) {
