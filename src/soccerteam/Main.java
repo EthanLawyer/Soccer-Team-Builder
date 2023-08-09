@@ -1,8 +1,5 @@
 package soccerteam;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 /**
  * The driver class for soccer team project.
  */
