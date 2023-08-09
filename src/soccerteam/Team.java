@@ -12,7 +12,7 @@ import java.util.TreeSet;
 public class Team implements ITeam {
 private final String teamName;
 private int teamSize;
-private HashMap<Integer, IPlayer> teamPlayers;
+private final HashMap<Integer, IPlayer> teamPlayers;
 private ArrayList<IPlayer> startingLineup;
 
   /**
@@ -55,11 +55,7 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public boolean isValidTeam() {
-    if ( teamSize >= 10 && teamSize <= 20 ) {
-      return true;
-    } else {
-      return false;
-    }
+    return teamSize >= 10 && teamSize <= 20;
   }
 
   /**
