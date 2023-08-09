@@ -75,21 +75,25 @@ public interface ITeam {
    * will be selected. If possible, these players will be assigned their
    * preferred positions, but not necessary. However, the goalie should be
    * played by Goalie as long as there is a Goalie on team, and other positions
-   * should not be substituted by Goalie unless players are not enough.
+   * should not be substituted by Goalie unless there are not enough players
+   * in such positions.
    * @throws IllegalStateException when the team is not valid yet
    */
   void selectStartingLineup() throws IllegalStateException;
 
 
   /**
-   * Gets all the players on this team.
+   * Gets all the players on this team. For every player, first name, last name, and jersey number
+   * will be returned. The list will be sorted in alphabetical order (last name).
    * @return a string
    */
   String getAllPlayersText();
 
 
   /**
-   * Gets the starting lineup of this team.
+   * Gets the starting lineup of this team. For every player, first name, last name, jersey number,
+   * and position will be returned. The list will be sorted by position (goalie, defender, midfielder,
+   * forward). Players with the same position will be ordered alphabetically (last name).
    * @return a string
    */
   String getStartingLineupText();
