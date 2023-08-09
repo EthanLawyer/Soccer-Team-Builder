@@ -251,7 +251,6 @@ private ArrayList<IPlayer> startingLineup;
     if (goalies.size() < 1) {
       IPlayer switchedGoalie = sortedPlayers.pollFirst();
       startingLineup.add(switchedGoalie);
-      assert switchedGoalie != null;
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
     // Make up for other shorted positions (if any).
