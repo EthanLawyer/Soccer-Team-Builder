@@ -137,7 +137,7 @@ public class ITeamTest {
    * Test adding player to a full team, but the new player is lower skilled than the least skilled
    * player on team.
    */
-  @Test(expected = IllegalStateException.class)
+  @Test
   public void testAddingLowSkillPlayerToFullTeam(){
     // Add 20 players.
     team.addPlayer("John", "Doe", "2018-08-05", "goalie", 4);
@@ -161,8 +161,14 @@ public class ITeamTest {
     team.addPlayer("Louis", "Litt", "2018-12-11", "defender", 4);
     team.addPlayer("William", "Gates", "2017-10-19", "defender", 4);
 
-    // Add a new player to the team, but he is lower skilled than the least skilled player on team, error will be thrown.
+    String originalTeam = team.getAllPlayersText();
+
+    // Add a new player to the team, but he is lower skilled than the least skilled player on team,
+    // the team should remain unchanged.
     team.addPlayer("Elon", "Musk", "2016-07-01", "goalie", 1);
+
+    String currentTeam = team.getAllPlayersText();
+    assertEquals(originalTeam, currentTeam);
   }
 
 
