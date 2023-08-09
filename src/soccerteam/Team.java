@@ -152,6 +152,9 @@ private ArrayList<IPlayer> startingLineup;
       throw new IllegalStateException("Error. Team has less than 10 players, please add more.");
     }
     // Each time wipe the previous starting lineup and create a new one.
+    for ( IPlayer player : startingLineup ) {
+      player.setActualPosition(Position.BENCH);
+    }
     startingLineup = new ArrayList<>();
 
     // Create a TreeSet sortedPlayers of all players based on their skill levels (max first).
