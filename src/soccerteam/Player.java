@@ -6,7 +6,7 @@ import java.time.LocalDate;
  * A player in a soccer team.
  */
 public class Player implements IPlayer {
-  private final String fistName;
+  private final String firstName;
   private final String lastName;
   private final LocalDate dateOfBirth;
   private final Position preferredPosition;
@@ -16,20 +16,20 @@ public class Player implements IPlayer {
 
   /**
    * Constructor.
-   * @param     fistName            the first name of this player
+   * @param     firstName            the first name of this player
    * @param     lastName            the last name of this player
    * @param     dateOfBirth         the date of birth of this player
    * @param     preferredPosition   this player's preferred position
    * @param     skillLevel          this player's skill level
    * @throws  IllegalArgumentException  when the skill level is not in range
    */
-  public Player(String fistName, String lastName, LocalDate dateOfBirth,
+  public Player(String firstName, String lastName, LocalDate dateOfBirth,
             Position preferredPosition, int skillLevel)
   {
     if ( skillLevel <= 0 || skillLevel > 5 ) {
       throw new IllegalArgumentException("Error. Skill level must be an int within 1 and 5.");
     }
-    this.fistName = fistName;
+    this.firstName = firstName;
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
     this.preferredPosition = preferredPosition;
@@ -40,7 +40,7 @@ public class Player implements IPlayer {
 
   @Override
   public String getFirstName() {
-    return fistName;
+    return firstName;
   }
 
   @Override
@@ -110,7 +110,7 @@ public class Player implements IPlayer {
    */
   @Override
   public String toString(){
-    String result = jerseyNumber + ". " + fistName + " " + lastName;
+    String result = jerseyNumber + ". " + firstName + " " + lastName;
     if ( actualPosition != Position.BENCH ){
       result = result + ", " + actualPosition.toString();
     }
