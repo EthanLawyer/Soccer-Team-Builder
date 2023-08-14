@@ -1,8 +1,5 @@
 package soccerteam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * A soccer team.
  */
@@ -19,21 +16,6 @@ public interface ITeam {
    * @return int
    */
   int getSize();
-
-
-  /**
-   * Gets the HashMap of players on this team, where keys are jersey numbers, values are IPlayer
-   * objects.
-   * @return HashMap<Integer, IPlayer>
-   */
-  HashMap<Integer, IPlayer> getTeamPlayers();
-
-
-  /**
-   * Gets the ArrayList of players in the starting lineup of this team.
-   * @return ArrayList<IPlayer>
-   */
-  ArrayList<IPlayer> getStartingLineup();
 
 
   /** Checks if the team is validly created.

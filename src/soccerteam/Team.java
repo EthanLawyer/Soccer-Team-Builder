@@ -44,16 +44,6 @@ private ArrayList<IPlayer> startingLineup;
   }
 
   @Override
-  public HashMap<Integer, IPlayer> getTeamPlayers() {
-    return teamPlayers;
-  }
-
-  @Override
-  public ArrayList<IPlayer> getStartingLineup() {
-    return startingLineup;
-  }
-
-  @Override
   public boolean isValidTeam() {
     return teamSize >= 10 && teamSize <= 20;
   }
@@ -179,7 +169,7 @@ private ArrayList<IPlayer> startingLineup;
     }
 
     // Select the highest skilled Goalie (if exists).
-    if ( goalies.size() >= 1 ) {
+    if (!goalies.isEmpty()) {
       IPlayer goalie = goalies.pollFirst();
       goalie.setActualPosition(Position.GOALIE);
       startingLineup.add(goalie);
@@ -248,13 +238,13 @@ private ArrayList<IPlayer> startingLineup;
 
     // Check if the starting lineup has been properly selected.
     // Make up for shorted goalie first (if any).
-    if (goalies.size() < 1) {
+    if ( goalies.isEmpty() ) {
       IPlayer switchedGoalie = sortedPlayers.pollFirst();
       startingLineup.add(switchedGoalie);
       switchedGoalie.setActualPosition(Position.GOALIE);
     }
     // Make up for other shorted positions (if any).
-    if (otherSixLineups.size() > 0) {
+    if ( !otherSixLineups.isEmpty() ) {
       // Make up for shorted defenders (if any).
       while ( startingDefendersTemp.size() < 2 ) {
         IPlayer switchedDefender = otherSixLineups.remove(0);
@@ -270,7 +260,7 @@ private ArrayList<IPlayer> startingLineup;
         switchedMidfielder.setActualPosition(Position.MIDFIELDER);
       }
       // Make up for shorted forward (if any).
-      while ( startingForwardsTemp.size() < 1 ) {
+      while ( startingForwardsTemp.isEmpty() ) {
         IPlayer switchedForward = otherSixLineups.remove(0);
         startingForwardsTemp.add(switchedForward);
         startingLineup.add(switchedForward);
@@ -296,7 +286,7 @@ private ArrayList<IPlayer> startingLineup;
 
   @Override
   public String getStartingLineupText() {
-    if ( startingLineup.size() == 0 ) {
+    if ( startingLineup.isEmpty() ) {
       return "The starting lineup has not been selected.";
     }
     // Create a new ArrayList to store the sorted starting lineup players.

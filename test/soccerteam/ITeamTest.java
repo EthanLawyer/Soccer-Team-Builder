@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,8 +28,7 @@ public class ITeamTest {
   public void testConstructor(){
     assertEquals("Vancouver U10", team.getName());
     assertEquals(0, team.getSize());
-    assertEquals(new HashMap<>(), team.getTeamPlayers());
-    assertEquals(new ArrayList<>(), team.getStartingLineup());
+    assertFalse(team.isValidTeam());
   }
 
   /**
@@ -80,14 +77,17 @@ public class ITeamTest {
     team.addPlayer("Jamie", "Oliver", "2018-06-15", "defender", 1);
 
     assertEquals(15, team.getSize());
-
-    int countNotAssignedJersey = 0;
-    for ( int key : team.getTeamPlayers().keySet() ){
-      if ( key == -1 ) {
-        countNotAssignedJersey++;
+    String allPlayersText = team.getAllPlayersText();
+    String[] addedPlayers = {"John Doe", "David Finch", "Francis Underwood", "Doug Stamper", "Remy Danton", "Walter White"
+        , "James McGill", "Jesse Pinkman", "Gustavo Fring", "Joe Johnson", "Zack Daniels", "William Lee", "Michael Jordan"
+        , "Ming Yao", "Jamie Oliver"};
+    int count = 0;
+    for (String playerName : addedPlayers){
+      if ( allPlayersText.contains(playerName) ){
+        count++;
       }
     }
-    assertEquals(0, countNotAssignedJersey);
+    assertEquals(15, count);
   }
 
   /**
@@ -352,7 +352,6 @@ public class ITeamTest {
 
     team.selectStartingLineup();
     team.selectStartingLineup();
-    assertEquals(7, team.getStartingLineup().size());
 
     int hasExpectedStartingLineup = 0;
     String[] allStartingLineup = team.getStartingLineupText().split("\\n");
@@ -406,7 +405,6 @@ public class ITeamTest {
     team.addPlayer("Joe", "Johnson", "2018-12-11", "defender", 4);
 
     team.selectStartingLineup();
-    assertEquals(7, team.getStartingLineup().size());
 
     int hasExpectedStartingLineup = 0;
     String[] allStartingLineup = team.getStartingLineupText().split("\\n");
@@ -440,7 +438,6 @@ public class ITeamTest {
     team.addPlayer("Joe", "Johnson", "2018-12-11", "midfielder", 4);
 
     team.selectStartingLineup();
-    assertEquals(7, team.getStartingLineup().size());
 
     int hasExpectedStartingLineup = 0;
     String[] allStartingLineup = team.getStartingLineupText().split("\\n");
