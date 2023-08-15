@@ -6,31 +6,31 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SoccerTeamView extends JFrame implements IView{
-  private JTextArea teamMembersArea;
-  private JTextArea actionResultArea;
-  private JPanel rightLowerPanel;
+  private final JTextArea teamDisplayArea;
+  private final JTextArea actionResultArea;
+  private JPanel inputPanel;
   private IController controller;
 
   public SoccerTeamView(String title) {
     super(title);
 
     setLayout(new GridLayout(1, 2));
-    setSize(800, 600);
+    setSize(1600, 1200);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     getContentPane().setBackground(Color.LIGHT_GRAY);
 
     // Left half setup
-    teamMembersArea = new JTextArea();
-    teamMembersArea.setEditable(false);
-    teamMembersArea.setOpaque(false);
+    teamDisplayArea = new JTextArea();
+    teamDisplayArea.setEditable(false);
+    teamDisplayArea.setOpaque(false);
 
     actionResultArea = new JTextArea();
     actionResultArea.setEditable(false);
     actionResultArea.setOpaque(false);
 
-    JSplitPane leftHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(teamMembersArea), new JScrollPane(actionResultArea));
-    leftHalf.setDividerLocation(2.0 / 3.0);
+    JSplitPane leftHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(teamDisplayArea), new JScrollPane(actionResultArea));
 
+    //leftHalf.setResizeWeight(0.0);
     add(leftHalf);
 
     // Right half setup
@@ -49,7 +49,7 @@ public class SoccerTeamView extends JFrame implements IView{
 
     JButton selectLineupBtn = new JButton("Select Starting Lineup");
     selectLineupBtn.addActionListener(e -> {
-      rightLowerPanel.removeAll();
+      inputPanel.removeAll();
       repaint();
       controller.selectStartingLineup();
     });
@@ -59,13 +59,15 @@ public class SoccerTeamView extends JFrame implements IView{
     rightUpperPanel.add(removePlayerBtn);
     rightUpperPanel.add(selectLineupBtn);
 
-    rightLowerPanel = new JPanel();
+    inputPanel = new JPanel();
 
-    JSplitPane rightHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, rightUpperPanel, rightLowerPanel);
+    JSplitPane rightHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, rightUpperPanel, inputPanel);
     add(rightHalf);
 
+    //pack();
     setExtendedState(JFrame.MAXIMIZED_BOTH);
     setVisible(true);
+    leftHalf.setDividerLocation(0.80);
   }
 
   @Override
@@ -75,8 +77,8 @@ public class SoccerTeamView extends JFrame implements IView{
 
   @Override
   public void showBuildTeamForm() {
-    rightLowerPanel.removeAll();
-    rightLowerPanel.setLayout(new FlowLayout());
+    inputPanel.removeAll();
+    inputPanel.setLayout(new FlowLayout());
 
     JTextField teamNameField = new JTextField(20);
     JButton createTeamBtn = new JButton("Create Team");
@@ -84,9 +86,9 @@ public class SoccerTeamView extends JFrame implements IView{
       controller.buildTeam(teamNameField.getText());
     });
 
-    rightLowerPanel.add(new JLabel("Team Name:"));
-    rightLowerPanel.add(teamNameField);
-    rightLowerPanel.add(createTeamBtn);
+    inputPanel.add(new JLabel("Team Name:"));
+    inputPanel.add(teamNameField);
+    inputPanel.add(createTeamBtn);
 
     revalidate();
     repaint();
@@ -94,7 +96,7 @@ public class SoccerTeamView extends JFrame implements IView{
 
   @Override
   public void showAddPlayerForm() {
-    rightLowerPanel.removeAll();
+    inputPanel.removeAll();
 
     JLabel firstNameLabel = new JLabel("First Name:");
     JTextField firstNameField = new JTextField(15);
@@ -112,7 +114,7 @@ public class SoccerTeamView extends JFrame implements IView{
     JComboBox<Integer> birthMonthDropdown = new JComboBox<>();
     for (int i = 1; i <= 12; i++) {
       birthMonthDropdown.addItem(i);
-    };
+    }
 
     JLabel birthYearLabel = new JLabel("Date of Birth (Year):");
     JComboBox<Integer> birthYearDropdown = new JComboBox<>();
@@ -136,7 +138,7 @@ public class SoccerTeamView extends JFrame implements IView{
       public void actionPerformed(ActionEvent e) {
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
-        Integer day = (Integer) birthDayDropdown.getSelectedIndex() + 1; // +1 because index is 0-based
+        Integer day = birthDayDropdown.getSelectedIndex() + 1; // +1 because index is 0-based
         Integer month = (Integer) birthMonthDropdown.getSelectedItem();
         String year = birthYearDropdown.getSelectedItem().toString();
         String position = positionDropdown.getSelectedItem().toString();
@@ -146,51 +148,41 @@ public class SoccerTeamView extends JFrame implements IView{
         controller.addPlayer(firstName, lastName, dateOfBirth, position, skillLevel);
       }
     });
-      rightLowerPanel.add(firstNameLabel);
-      rightLowerPanel.add(firstNameField);
-      rightLowerPanel.add(lastNameLabel);
-      rightLowerPanel.add(lastNameField);
-      rightLowerPanel.add(birthDayLabel);
-      rightLowerPanel.add(birthDayDropdown);
-      rightLowerPanel.add(birthMonthLabel);
-      rightLowerPanel.add(birthMonthDropdown);
-      rightLowerPanel.add(birthYearLabel);
-      rightLowerPanel.add(birthYearDropdown);
-      rightLowerPanel.add(positionLabel);
-      rightLowerPanel.add(positionDropdown);
-      rightLowerPanel.add(skillLevelLabel);
-      rightLowerPanel.add(skillLevelDropdown);
-      rightLowerPanel.add(submitButton);
-      rightLowerPanel.revalidate();
-      rightLowerPanel.repaint();
+      inputPanel.add(firstNameLabel);
+      inputPanel.add(firstNameField);
+      inputPanel.add(lastNameLabel);
+      inputPanel.add(lastNameField);
+      inputPanel.add(birthDayLabel);
+      inputPanel.add(birthDayDropdown);
+      inputPanel.add(birthMonthLabel);
+      inputPanel.add(birthMonthDropdown);
+      inputPanel.add(birthYearLabel);
+      inputPanel.add(birthYearDropdown);
+      inputPanel.add(positionLabel);
+      inputPanel.add(positionDropdown);
+      inputPanel.add(skillLevelLabel);
+      inputPanel.add(skillLevelDropdown);
+      inputPanel.add(submitButton);
+      inputPanel.revalidate();
+      inputPanel.repaint();
     }
 
 
   @Override
   public void showRemovePlayerForm() {
-    rightLowerPanel.removeAll();
-    rightLowerPanel.setLayout(new FlowLayout());
+    inputPanel.removeAll();
+    inputPanel.setLayout(new FlowLayout());
 
     JTextField jerseyNumberField = new JTextField(10);
     JButton removePlayerBtn = new JButton("Remove Player");
     removePlayerBtn.addActionListener(e -> controller.removePlayer(Integer.parseInt(jerseyNumberField.getText())));
 
-    rightLowerPanel.add(new JLabel("Jersey Number:"));
-    rightLowerPanel.add(jerseyNumberField);
-    rightLowerPanel.add(removePlayerBtn);
+    inputPanel.add(new JLabel("Jersey Number:"));
+    inputPanel.add(jerseyNumberField);
+    inputPanel.add(removePlayerBtn);
 
     revalidate();
     repaint();
-  }
-
-  @Override
-  public void showTeam(String allPlayers, String startingLineup) {
-    teamMembersArea.setText(allPlayers + "\n\n" + startingLineup);
-  }
-
-  @Override
-  public void showActionResult(String result) {
-    actionResultArea.setText(result);
   }
 
   @Override
@@ -201,7 +193,7 @@ public class SoccerTeamView extends JFrame implements IView{
 
   @Override
   // Method to update the upper part of the left half of the GUI with team members and starting lineup.
-  public void updateTeamMembers(String allPlayers, String startingLineup) {
-    teamMembersArea.setText(allPlayers + "\n\n" + startingLineup);
+  public void updateTeamMembers(String teamName, String allPlayers, String startingLineup) {
+    teamDisplayArea.setText(teamName + allPlayers + startingLineup);
   }
 }
