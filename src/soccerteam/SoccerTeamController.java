@@ -58,13 +58,12 @@ public class SoccerTeamController implements IController{
   @Override
   public void updateTeamView() {
     if (team != null) {
-      String allPlayers = team.getAllPlayersText();
-      String startingLineup = team.getStartingLineupText();
-      view.updateTeamMembers(allPlayers, startingLineup);
+      String teamName = "Team Name: " + team.getName() + "\n\n";
+      String allPlayers = "Team Players:\n" + team.getAllPlayersText() + "\n\n";
+      String startingLineup = "Starting Lineups:\n" +team.getStartingLineupText();
+      view.updateTeamMembers(teamName, allPlayers, startingLineup);
     } else {
-      view.updateTeamMembers("", "");
+      view.updateTeamMembers("", "", "");
     }
   }
-
-  // Optionally, you can have setters/getters or other utility methods here as needed.
 }
