@@ -5,7 +5,11 @@ package soccerteam;
  */
 public class Main {
   public static void main(String[] args) {
+    IView view = new SoccerTeamView("Soccer Team Builder");
+    IController controller = new SoccerTeamController(view);
+    view.setController(controller);
 
+    /*
     // Create a team.
     ITeam team = new Team("Vancouver U10");
 
@@ -38,11 +42,11 @@ public class Main {
     // Remove the player with jersey number 15 from the team, then add a new player to the team.
     // then print the updated team members.
     System.out.println("The original number 15 is:");
-    System.out.println(team.getTeamPlayers().get(15));
+    //System.out.println(team.getTeamPlayers().get(15));
     team.removePlayer(15);
     team.addPlayer("Elon", "Musk", "2016-07-01", "goalie", 3);
     System.out.println("The new number 15 is (should be Elon Musk):");
-    System.out.println(team.getTeamPlayers().get(15));
+   // System.out.println(team.getTeamPlayers().get(15));
 
     // Print the starting lineup (has not selected yet).
     System.out.println("\nThe current starting lineup (not selected yet):");
@@ -54,5 +58,6 @@ public class Main {
     // Print the starting lineup (now it's selected).
     System.out.println("\nThe current starting lineup (after selected):");
     System.out.println(team.getStartingLineupText());
+     */
   }
 }
