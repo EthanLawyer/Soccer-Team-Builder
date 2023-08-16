@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import javax.swing.JButton;
@@ -109,17 +108,26 @@ public class SoccerTeamView extends JFrame implements IView{
   @Override
   public void showBuildTeamForm() {
     inputPanel.removeAll();
-    inputPanel.setLayout(new FlowLayout());
+
+    JPanel messagePanel = new JPanel();
+    messagePanel.add(new JLabel("Team Name:"));
 
     JTextField teamNameField = new JTextField();
     teamNameField.setPreferredSize(new Dimension(300,45));
+    JPanel nameInputPanel = new JPanel();
+    nameInputPanel.add(teamNameField);
+
     JButton createTeamBtn = new JButton("Create Team");
     createTeamBtn.setPreferredSize(new Dimension(200, 45));
     createTeamBtn.addActionListener((ActionEvent e) -> controller.buildTeam(teamNameField.getText()));
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.add(createTeamBtn);
 
-    inputPanel.add(new JLabel("Team Name:"));
-    inputPanel.add(teamNameField);
-    inputPanel.add(createTeamBtn);
+    inputPanel.setLayout(new GridLayout(6,1));
+    inputPanel.add(new JPanel());
+    inputPanel.add(messagePanel);
+    inputPanel.add(nameInputPanel);
+    inputPanel.add(buttonPanel);
     changeFontSize(inputPanel, 16);
     revalidate();
     repaint();
@@ -206,7 +214,7 @@ public class SoccerTeamView extends JFrame implements IView{
     });
 
       inputPanel.setLayout(new GridLayout(8,1));
-      inputPanel.add(new Panel());
+      inputPanel.add(new JPanel());
       inputPanel.add(firstNamePanel);
       inputPanel.add(lastNamePanel);
       inputPanel.add(birthDatePanel);
@@ -242,7 +250,7 @@ public class SoccerTeamView extends JFrame implements IView{
 
 
     inputPanel.setLayout(new GridLayout(6,1));
-    inputPanel.add(new Panel());
+    inputPanel.add(new JPanel());
     inputPanel.add(jerseyNumberPanel);
     inputPanel.add(removeButtonPanel);
 
