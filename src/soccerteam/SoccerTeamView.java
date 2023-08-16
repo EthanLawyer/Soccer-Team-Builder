@@ -88,14 +88,14 @@ public class SoccerTeamView extends JFrame implements IView {
         // the select starting lineup button.
     JButton selectLineupBtn = new JButton("Select Starting Lineup");
     selectLineupBtn.addActionListener(e -> {
-      inputPanel.removeAll();
+      inputPanel.removeAll();  // When clicked, remove all displayed components in the bottom-right panel (if any).
       repaint();
       controller.selectStartingLineup();
     });
     topRight.add(selectLineupBtn);
 
     // Bottom-right area setup (the input panel based on the chosen action of the player, which will
-    // be updated by the show method of each action.
+    // be updated by the show method of each action).
     inputPanel = new JPanel();
 
     // Put the top-right and bottom-right part into a vertically split panel.
@@ -130,22 +130,25 @@ public class SoccerTeamView extends JFrame implements IView {
 
   @Override
   public void showBuildTeamForm() {
-    inputPanel.removeAll();
+    inputPanel.removeAll(); // Remove all the displayed components in the bottom-right panel (if any).
 
+    // In total 3 components:
+      // 1. the title text.
     JPanel messagePanel = new JPanel();
     messagePanel.add(new JLabel("Team Name:"));
-
+      // 2. the text entry field for team name.
     JTextField teamNameField = new JTextField();
     teamNameField.setPreferredSize(new Dimension(300,45));
     JPanel nameInputPanel = new JPanel();
     nameInputPanel.add(teamNameField);
-
+      // 3. the create team button.
     JButton createTeamBtn = new JButton("Create Team");
     createTeamBtn.setPreferredSize(new Dimension(200, 45));
     createTeamBtn.addActionListener((ActionEvent e) -> controller.buildTeam(teamNameField.getText()));
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(createTeamBtn);
 
+    // Put all 3 components inside a GridLayout inputPanel.
     inputPanel.setLayout(new GridLayout(6,1));
     inputPanel.add(new JPanel());
     inputPanel.add(messagePanel);
@@ -158,35 +161,34 @@ public class SoccerTeamView extends JFrame implements IView {
 
   @Override
   public void showAddPlayerForm() {
-    inputPanel.removeAll();
-
+    inputPanel.removeAll(); // Remove all the displayed components in the bottom-right panel (if any).
+    // In total 13 components, which will be grouped into 6 panels:
+      // 1. the first name panel (2 components).
     JLabel firstNameLabel = new JLabel("First Name:");
     JTextField firstNameField = new JTextField(15);
     JPanel firstNamePanel = new JPanel();
     firstNamePanel.setLayout(new FlowLayout());
     firstNamePanel.add(firstNameLabel);
     firstNamePanel.add(firstNameField);
-
+      // 2. the last name panel (2 components).
     JLabel lastNameLabel = new JLabel("Last Name:");
     JTextField lastNameField = new JTextField(15);
     JPanel lastNamePanel = new JPanel();
     lastNamePanel.setLayout(new FlowLayout());
     lastNamePanel.add(lastNameLabel);
     lastNamePanel.add(lastNameField);
-
+      // 3. the birthdate panel (4 components).
     JLabel birthDateLabel = new JLabel("Date of Birth (Y-M-D):");
-    JComboBox<Integer> birthYearDropdown = new JComboBox<>();
+    JComboBox<Integer> birthYearDropdown = new JComboBox<>(); // Year drop-down menu.
     int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     for (int i = currentYear; i >= currentYear - 50; i--) {
       birthYearDropdown.addItem(i);
     }
-
-    JComboBox<Integer> birthDayDropdown = new JComboBox<>();
+    JComboBox<Integer> birthDayDropdown = new JComboBox<>(); // Day drop-down menu.
     for (int i = 1; i <= 31; i++) {
       birthDayDropdown.addItem(i);
     }
-
-    JComboBox<Integer> birthMonthDropdown = new JComboBox<>();
+    JComboBox<Integer> birthMonthDropdown = new JComboBox<>(); // Month drop-down menu.
     for (int i = 1; i <= 12; i++) {
       birthMonthDropdown.addItem(i);
     }
@@ -196,10 +198,10 @@ public class SoccerTeamView extends JFrame implements IView {
     birthDatePanel.add(birthYearDropdown);
     birthDatePanel.add(birthMonthDropdown);
     birthDatePanel.add(birthDayDropdown);
-
-    JLabel positionLabel = new JLabel("Position:");
+      // 4. the preferred position panel (2 components).
+    JLabel positionLabel = new JLabel("Preferred Position:");
     JComboBox<Position> positionDropdown = new JComboBox<>();
-    for ( Position position : Position.values() ){
+    for ( Position position : Position.values() ){ // Skip the "BENCH" position.
       if ( position != Position.BENCH ){
         positionDropdown.addItem(position);
       }
@@ -208,7 +210,7 @@ public class SoccerTeamView extends JFrame implements IView {
     positionPanel.setLayout(new FlowLayout());
     positionPanel.add(positionLabel);
     positionPanel.add(positionDropdown);
-
+      // 5. the skill level panel (2 components).
     JLabel skillLevelLabel = new JLabel("Skill Level:");
     JComboBox<Integer> skillLevelDropdown = new JComboBox<>();
     for (int i = 1; i <= 5; i++) {
@@ -218,7 +220,7 @@ public class SoccerTeamView extends JFrame implements IView {
     skillLevelPanel.setLayout(new FlowLayout());
     skillLevelPanel.add(skillLevelLabel);
     skillLevelPanel.add(skillLevelDropdown);
-
+      // 6. the submit button panel (1 component).
     JPanel submitButtonPanel = new JPanel();
     JButton submitButton = new JButton("Submit");
     submitButton.setPreferredSize(new Dimension(100, 45));
@@ -226,6 +228,8 @@ public class SoccerTeamView extends JFrame implements IView {
     submitButton.addActionListener(e -> {
       String firstName = firstNameField.getText();
       String lastName = lastNameField.getText();
+      // Parse the year, month and day chosen in the drop-down menu into a "YYYY-MM-DD" string,
+      // so that it can be passed to the addPlayer method in the controller.
       Integer day = (Integer) birthDayDropdown.getSelectedItem();
       Integer month = (Integer) birthMonthDropdown.getSelectedItem();
       String year = birthYearDropdown.getSelectedItem().toString();
@@ -235,7 +239,7 @@ public class SoccerTeamView extends JFrame implements IView {
 
       controller.addPlayer(firstName, lastName, dateOfBirth, position, skillLevel);
     });
-
+      // Add each panel to a GridLayout inputPanel (8 rows for better display effect)
       inputPanel.setLayout(new GridLayout(8,1));
       inputPanel.add(new JPanel());
       inputPanel.add(firstNamePanel);
@@ -253,16 +257,17 @@ public class SoccerTeamView extends JFrame implements IView {
 
   @Override
   public void showRemovePlayerForm() {
-    inputPanel.removeAll();
-
-    JComboBox<Integer> jerseyNumberDropdown = new JComboBox<>();
+    inputPanel.removeAll(); // Remove all the displayed components in the bottom-right panel (if any).
+    // In total 3 components, which will be grouped into 2 panels:
+      // 1. the jersey number panel (2 components).
+    JComboBox<Integer> jerseyNumberDropdown = new JComboBox<>(); // Use a drop-down menu to avoid invalid input.
     for (int i = 1; i <= 20; i++) {
       jerseyNumberDropdown.addItem(i);
     }
     JPanel jerseyNumberPanel = new JPanel();
     jerseyNumberPanel.add(new JLabel("Jersey Number:"));
     jerseyNumberPanel.add(jerseyNumberDropdown);
-
+      // 2. the button panel (1 component)
     JButton removePlayerBtn = new JButton("Remove Player");
     removePlayerBtn.setPreferredSize(new Dimension(200,45));
     removePlayerBtn.addActionListener((ActionEvent e) -> {
@@ -271,7 +276,7 @@ public class SoccerTeamView extends JFrame implements IView {
     JPanel removeButtonPanel = new JPanel();
     removeButtonPanel.add(removePlayerBtn);
 
-
+    // Put the 2 panels into a GridLayout inputPanel (6 rows for better display effect)
     inputPanel.setLayout(new GridLayout(6,1));
     inputPanel.add(new JPanel());
     inputPanel.add(jerseyNumberPanel);
@@ -283,14 +288,12 @@ public class SoccerTeamView extends JFrame implements IView {
   }
 
   @Override
-  // Method to update the lower part of the left half of the GUI with action results.
   public void updateActionResult(String message) {
-    actionResultArea.setText(message);
+    actionResultArea.setText(message); // in the bottom-left area.
   }
 
   @Override
-  // Method to update the upper part of the left half of the GUI with team members and starting lineup.
   public void updateTeamMembers(String teamName, String allPlayers, String startingLineup) {
-    teamDisplayArea.setText(teamName + allPlayers + startingLineup);
+    teamDisplayArea.setText(teamName + allPlayers + startingLineup); // in the top-left area.
   }
 }
