@@ -88,4 +88,10 @@ public interface IPlayer {
    * @throws IllegalStateException when this player already has a jersey number
    */
   void setJerseyNumber(int number) throws IllegalArgumentException, IllegalStateException;
+
+  /**
+   * Compares if two IPlayer objects are the same based on their names.
+   * @param   player2   the other player
+   */
+  boolean equals(IPlayer player2);
 }

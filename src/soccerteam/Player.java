@@ -1,6 +1,7 @@
 package soccerteam;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * A player in a soccer team.
@@ -102,6 +103,12 @@ public class Player implements IPlayer {
       throw new IllegalStateException("Error. This player already has a jersey number.");
     }
     this.jerseyNumber = number;
+  }
+
+  @Override
+  public boolean equals(IPlayer player2) {
+    return Objects.equals(firstName, player2.getFirstName()) && Objects.equals(lastName,
+        player2.getLastName());
   }
 
   /**
