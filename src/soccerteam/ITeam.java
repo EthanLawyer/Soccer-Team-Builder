@@ -35,6 +35,7 @@ public interface ITeam {
    *                                    2. when the date format is not correct, or
    *                                    3. when the preferred position is not valid, or
    *                                    4. when the skill level is out of range
+   *                                    5. when there is already a player with the same name
    */
   void addPlayer(String firstName, String lastName, String dateOfBirth, String preferredPosition,
       int skillLevel) throws IllegalArgumentException;

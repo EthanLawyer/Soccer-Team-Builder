@@ -97,6 +97,12 @@ private ArrayList<IPlayer> startingLineup;
     }
     // Create player.
     IPlayer player = new Player(firstName, lastName, birthDate, position, skillLevel);
+    // Check if this player is already on team.
+    for ( IPlayer currentPlayer : teamPlayers.values() ){
+      if ( currentPlayer.equals(player) ){
+        throw new IllegalArgumentException("Error. This player is already on team.");
+      }
+    }
     // Assign jersey number.
     int newJerseyNumber = generateJerseyNumber();
     while ( teamPlayers.containsKey(newJerseyNumber) ) {
