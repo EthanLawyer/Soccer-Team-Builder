@@ -152,7 +152,9 @@ private ArrayList<IPlayer> startingLineup;
     // Create a TreeSet sortedPlayers of all players based on their skill levels (max first).
     // Tie-breaking rule: If same skill level, youngest first; if same age, last name order.
     TreeSet<IPlayer> sortedPlayers = new TreeSet<>(
-        Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
+        Comparator.comparingInt(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth)
+            .thenComparing(IPlayer::getLastName).thenComparing(IPlayer::getFirstName).
+                thenComparing(IPlayer::getPreferredPosition).thenComparing(IPlayer::getJerseyNumber));
     for ( Map.Entry<Integer, IPlayer> entry : teamPlayers.entrySet() ) {
       IPlayer player = entry.getValue();
       sortedPlayers.add(player);
@@ -164,7 +166,9 @@ private ArrayList<IPlayer> startingLineup;
     // Goalie unless players are not enough.
     // Tie-breaking rule: If same skill level, youngest first; if same age, last name order.
     TreeSet<IPlayer> goalies = new TreeSet<>(
-        Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth).thenComparing(IPlayer::getLastName));
+        Comparator.comparing(IPlayer::getSkillLevel).reversed().thenComparing(IPlayer::getDateOfBirth)
+            .thenComparing(IPlayer::getLastName).thenComparing(IPlayer::getFirstName).
+                thenComparing(IPlayer::getPreferredPosition).thenComparing(IPlayer::getJerseyNumber));
     for ( IPlayer player : sortedPlayers ) {
       if ( player.getPreferredPosition() == Position.GOALIE ) {
         goalies.add(player);
