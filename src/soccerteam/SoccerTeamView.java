@@ -19,12 +19,29 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class SoccerTeamView extends JFrame implements IView{
+/**
+ * The view of soccer team, an implementation of IView interface.
+ * The view is a fixed-size window of 800 * 800, will exit when clicking the "x" button.
+ * The view consists of 4 areas:
+ * 1. the top-left displays the real-time information of the team name, players list and starting lineup;
+ * 2. the bottom-left displays the result of each of the user's actions;
+ * 3. the top-right displays 4 buttons to let the user choose action, namely to create a team, to add
+ *    a player, to remove a player or to select the starting lineup.
+ * 4. the bottom-right displays an input panel based on the chosen action of the player, which will
+ *    clear and change once a button on the top-right area is clicked.
+ */
+public class SoccerTeamView extends JFrame implements IView {
   private final JTextArea teamDisplayArea;
   private final JTextArea actionResultArea;
   private JPanel inputPanel;
   private IController controller;
 
+  /**
+   * Constructor.
+   * The left and right half of the view is implemented by GridLayout, and the top and bottom of
+   * each half is implemented with a JSplitPane.
+   * @param   title   the text to be displayed on the title of the GUI window.
+   */
   public SoccerTeamView(String title) {
     super(title);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,46 +49,43 @@ public class SoccerTeamView extends JFrame implements IView{
     setSize(800, 800);
     getContentPane().setBackground(Color.LIGHT_GRAY);
 
-    // Top-left half is the team players information display area.
+    // Top-left area setup (the team players information display area).
     teamDisplayArea = new JTextArea();
     teamDisplayArea.setEditable(false);
     teamDisplayArea.setOpaque(false);
-    //teamDisplayArea.setPreferredSize(new Dimension(380, 600));
-    JScrollPane topLeft = new JScrollPane(teamDisplayArea);
+    JScrollPane topLeft = new JScrollPane(teamDisplayArea); // Make it scrollable in case of too many texts.
 
-    // Bottom-left area is the action result display area.
+    // Bottom-left area setup (the action result display area).
     actionResultArea = new JTextArea();
     actionResultArea.setEditable(false);
     actionResultArea.setOpaque(false);
-    JScrollPane bottomLeft = new JScrollPane(actionResultArea);
-    //actionResultArea.setPreferredSize(new Dimension(350, 200));
+    JScrollPane bottomLeft = new JScrollPane(actionResultArea); // Make it scrollable in case of too many texts.
 
-    // Left half is a vertically split panel.
+    // Put the top-left and bottom-left part into a vertically split panel.
     JSplitPane leftHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topLeft, bottomLeft);
-    leftHalf.setDividerLocation(0.7);
     this.add(leftHalf);
 
-
-    // Top-right area is the action buttons.
+    // Top-right area setup (a GridLayout JPanel that holds 4 action buttons).
     JPanel topRight = new JPanel();
     topRight.setLayout(new GridLayout(5, 1));
+        // the title message.
     JLabel topRightMessage = new JLabel("Please select an action:");
     topRightMessage.setFont(new Font("Default", Font.BOLD, 16));
     topRight.add(topRightMessage);
-
+        // the build team button.
     JButton buildTeamBtn = new JButton("Build a Team");
     buildTeamBtn.setPreferredSize(new Dimension(300, 45));
     buildTeamBtn.addActionListener(e -> showBuildTeamForm());
     topRight.add(buildTeamBtn);
-
+        // the add player button.
     JButton addPlayerBtn = new JButton("Add a Player");
     addPlayerBtn.addActionListener(e -> showAddPlayerForm());
     topRight.add(addPlayerBtn);
-
+        // the remove player button.
     JButton removePlayerBtn = new JButton("Remove a Player");
     removePlayerBtn.addActionListener(e -> showRemovePlayerForm());
     topRight.add(removePlayerBtn);
-
+        // the select starting lineup button.
     JButton selectLineupBtn = new JButton("Select Starting Lineup");
     selectLineupBtn.addActionListener(e -> {
       inputPanel.removeAll();
@@ -80,17 +94,26 @@ public class SoccerTeamView extends JFrame implements IView{
     });
     topRight.add(selectLineupBtn);
 
-    // Bottom-right area is the input panel for action instructions.
+    // Bottom-right area setup (the input panel based on the chosen action of the player, which will
+    // be updated by the show method of each action.
     inputPanel = new JPanel();
 
+    // Put the top-right and bottom-right part into a vertically split panel.
     JSplitPane rightHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRight, inputPanel);
     this.add(rightHalf);
 
-    changeFontSize(this, 16);
+    changeFontSize(this, 16); // Change font size of all the contents.
     setResizable(false);
     setVisible(true);
+    leftHalf.setDividerLocation(0.8); // Set the proportion of the top-left: bottom-left to 4:1.
   }
 
+
+  /**
+   * Change the font size of all the components in their container.
+   * @param   container   the container of components
+   * @param   fontSize    the intended font size
+   */
   private void changeFontSize(Container container, int fontSize) {
     for (Component component : container.getComponents()) {
       component.setFont(new Font("Default", Font.PLAIN, fontSize));
@@ -242,7 +265,7 @@ public class SoccerTeamView extends JFrame implements IView{
 
     JButton removePlayerBtn = new JButton("Remove Player");
     removePlayerBtn.setPreferredSize(new Dimension(200,45));
-    removePlayerBtn.addActionListener(e -> {
+    removePlayerBtn.addActionListener((ActionEvent e) -> {
       controller.removePlayer(Integer.parseInt(jerseyNumberDropdown.getSelectedItem().toString()));
     });
     JPanel removeButtonPanel = new JPanel();
