@@ -67,10 +67,14 @@ public class SoccerTeamController implements IController{
       String teamName = "Team Name: " + team.getName() + "\n\n";
       String allPlayers = "Team Players:\n" + team.getAllPlayersText() + "\n";
       String startingLineup = "Starting Lineups:\n" +team.getStartingLineupText();
-      view.updateTeamMembers(teamName, allPlayers, startingLineup);
+      String warning = "";
+      if ( team.getSize() < 10 ) {
+        warning = "\n\nWarning:\nLess than 10 players on team, please add more!";
+      }
+      view.updateTeamMembers(teamName, allPlayers, startingLineup, warning);
     } else {
       // when the team is just created, top-left area of view shows nothing.
-      view.updateTeamMembers("", "", "");
+      view.updateTeamMembers("", "", "", "");
     }
   }
 }
