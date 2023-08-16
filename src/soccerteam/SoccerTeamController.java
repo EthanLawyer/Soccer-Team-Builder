@@ -1,10 +1,16 @@
 package soccerteam;
 
+/**
+ * The controller of soccer team, an implementation of IController interface.
+ */
 public class SoccerTeamController implements IController{
-
   private ITeam team;
-  private IView view;
+  private final IView view;
 
+  /**
+   * Constructor.
+   * @param   view  the IView object that to interact with.
+   */
   public SoccerTeamController(IView view) {
     this.view = view;
   }
@@ -12,7 +18,7 @@ public class SoccerTeamController implements IController{
   @Override
   public void buildTeam(String teamName) {
     this.team = new Team(teamName);
-    updateTeamView();
+    updateTeamView(); // when the team is just created, top-left area of view shows nothing.
   }
 
   @Override
@@ -63,6 +69,7 @@ public class SoccerTeamController implements IController{
       String startingLineup = "Starting Lineups:\n" +team.getStartingLineupText();
       view.updateTeamMembers(teamName, allPlayers, startingLineup);
     } else {
+      // when the team is just created, top-left area of view shows nothing.
       view.updateTeamMembers("", "", "");
     }
   }
