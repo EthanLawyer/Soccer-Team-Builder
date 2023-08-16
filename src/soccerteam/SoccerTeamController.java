@@ -59,7 +59,7 @@ public class SoccerTeamController implements IController{
   public void updateTeamView() {
     if (team != null) {
       String teamName = "Team Name: " + team.getName() + "\n\n";
-      String allPlayers = "Team Players:\n" + team.getAllPlayersText() + "\n\n";
+      String allPlayers = "Team Players:\n" + team.getAllPlayersText() + "\n";
       String startingLineup = "Starting Lineups:\n" +team.getStartingLineupText();
       view.updateTeamMembers(teamName, allPlayers, startingLineup);
     } else {
