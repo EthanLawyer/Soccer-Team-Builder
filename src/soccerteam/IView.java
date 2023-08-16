@@ -39,6 +39,7 @@ public interface IView {
    * @param   teamName        the team name
    * @param   allPlayers      the list of all current players
    * @param   startingLineup  the list of all current starting lineups
+   * @param   warning         the warning message (when team has less than 10 players)
    */
-  void updateTeamMembers(String teamName, String allPlayers, String startingLineup);
+  void updateTeamMembers(String teamName, String allPlayers, String startingLineup, String warning);
 }

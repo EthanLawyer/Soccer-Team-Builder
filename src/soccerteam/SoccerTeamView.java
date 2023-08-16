@@ -293,7 +293,7 @@ public class SoccerTeamView extends JFrame implements IView {
   }
 
   @Override
-  public void updateTeamMembers(String teamName, String allPlayers, String startingLineup) {
-    teamDisplayArea.setText(teamName + allPlayers + startingLineup); // in the top-left area.
+  public void updateTeamMembers(String teamName, String allPlayers, String startingLineup, String warning) {
+    teamDisplayArea.setText(teamName + allPlayers + startingLineup + warning); // in the top-left area.
   }
 }
