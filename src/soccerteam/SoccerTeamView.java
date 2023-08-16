@@ -1,9 +1,24 @@
 package soccerteam;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Calendar;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class SoccerTeamView extends JFrame implements IView{
   private final JTextArea teamDisplayArea;
@@ -13,39 +28,50 @@ public class SoccerTeamView extends JFrame implements IView{
 
   public SoccerTeamView(String title) {
     super(title);
-
-    setLayout(new GridLayout(1, 2));
-    setSize(1600, 1200);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLayout(new GridLayout(1,2));
+    setSize(800, 800);
     getContentPane().setBackground(Color.LIGHT_GRAY);
 
-    // Left half setup
+    // Top-left half is the team players information display area.
     teamDisplayArea = new JTextArea();
     teamDisplayArea.setEditable(false);
     teamDisplayArea.setOpaque(false);
+    //teamDisplayArea.setPreferredSize(new Dimension(380, 600));
+    JScrollPane topLeft = new JScrollPane(teamDisplayArea);
 
+    // Bottom-left area is the action result display area.
     actionResultArea = new JTextArea();
     actionResultArea.setEditable(false);
     actionResultArea.setOpaque(false);
+    JScrollPane bottomLeft = new JScrollPane(actionResultArea);
+    //actionResultArea.setPreferredSize(new Dimension(350, 200));
 
-    JSplitPane leftHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(teamDisplayArea), new JScrollPane(actionResultArea));
+    // Left half is a vertically split panel.
+    JSplitPane leftHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topLeft, bottomLeft);
+    leftHalf.setDividerLocation(0.7);
+    this.add(leftHalf);
 
-    //leftHalf.setResizeWeight(0.0);
-    add(leftHalf);
 
-    // Right half setup
-    JPanel rightUpperPanel = new JPanel();
-    rightUpperPanel.setLayout(new GridLayout(5, 1));
-    rightUpperPanel.add(new JLabel("Please select an action:"));
+    // Top-right area is the action buttons.
+    JPanel topRight = new JPanel();
+    topRight.setLayout(new GridLayout(5, 1));
+    JLabel topRightMessage = new JLabel("Please select an action:");
+    topRightMessage.setFont(new Font("Default", Font.BOLD, 16));
+    topRight.add(topRightMessage);
 
     JButton buildTeamBtn = new JButton("Build a Team");
+    buildTeamBtn.setPreferredSize(new Dimension(300, 45));
     buildTeamBtn.addActionListener(e -> showBuildTeamForm());
+    topRight.add(buildTeamBtn);
 
     JButton addPlayerBtn = new JButton("Add a Player");
     addPlayerBtn.addActionListener(e -> showAddPlayerForm());
+    topRight.add(addPlayerBtn);
 
     JButton removePlayerBtn = new JButton("Remove a Player");
     removePlayerBtn.addActionListener(e -> showRemovePlayerForm());
+    topRight.add(removePlayerBtn);
 
     JButton selectLineupBtn = new JButton("Select Starting Lineup");
     selectLineupBtn.addActionListener(e -> {
@@ -53,21 +79,26 @@ public class SoccerTeamView extends JFrame implements IView{
       repaint();
       controller.selectStartingLineup();
     });
+    topRight.add(selectLineupBtn);
 
-    rightUpperPanel.add(buildTeamBtn);
-    rightUpperPanel.add(addPlayerBtn);
-    rightUpperPanel.add(removePlayerBtn);
-    rightUpperPanel.add(selectLineupBtn);
-
+    // Bottom-right area is the input panel for action instructions.
     inputPanel = new JPanel();
 
-    JSplitPane rightHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, rightUpperPanel, inputPanel);
-    add(rightHalf);
+    JSplitPane rightHalf = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRight, inputPanel);
+    this.add(rightHalf);
 
-    //pack();
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    changeFontSize(this, 16);
+    setResizable(false);
     setVisible(true);
-    leftHalf.setDividerLocation(0.80);
+  }
+
+  private void changeFontSize(Container container, int fontSize) {
+    for (Component component : container.getComponents()) {
+      component.setFont(new Font("Default", Font.PLAIN, fontSize));
+      if (component instanceof Container) {
+        changeFontSize((Container) component, fontSize);
+      }
+    }
   }
 
   @Override
@@ -80,16 +111,16 @@ public class SoccerTeamView extends JFrame implements IView{
     inputPanel.removeAll();
     inputPanel.setLayout(new FlowLayout());
 
-    JTextField teamNameField = new JTextField(20);
+    JTextField teamNameField = new JTextField();
+    teamNameField.setPreferredSize(new Dimension(300,45));
     JButton createTeamBtn = new JButton("Create Team");
-    createTeamBtn.addActionListener(e -> {
-      controller.buildTeam(teamNameField.getText());
-    });
+    createTeamBtn.setPreferredSize(new Dimension(200, 45));
+    createTeamBtn.addActionListener((ActionEvent e) -> controller.buildTeam(teamNameField.getText()));
 
     inputPanel.add(new JLabel("Team Name:"));
     inputPanel.add(teamNameField);
     inputPanel.add(createTeamBtn);
-
+    changeFontSize(inputPanel, 16);
     revalidate();
     repaint();
   }
@@ -100,69 +131,90 @@ public class SoccerTeamView extends JFrame implements IView{
 
     JLabel firstNameLabel = new JLabel("First Name:");
     JTextField firstNameField = new JTextField(15);
+    JPanel firstNamePanel = new JPanel();
+    firstNamePanel.setLayout(new FlowLayout());
+    firstNamePanel.add(firstNameLabel);
+    firstNamePanel.add(firstNameField);
 
     JLabel lastNameLabel = new JLabel("Last Name:");
     JTextField lastNameField = new JTextField(15);
+    JPanel lastNamePanel = new JPanel();
+    lastNamePanel.setLayout(new FlowLayout());
+    lastNamePanel.add(lastNameLabel);
+    lastNamePanel.add(lastNameField);
 
-    JLabel birthDayLabel = new JLabel("Date of Birth (Day):");
+    JLabel birthDateLabel = new JLabel("Date of Birth (Y-M-D):");
+    JComboBox<Integer> birthYearDropdown = new JComboBox<>();
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    for (int i = currentYear; i >= currentYear - 50; i--) {
+      birthYearDropdown.addItem(i);
+    }
+
     JComboBox<Integer> birthDayDropdown = new JComboBox<>();
     for (int i = 1; i <= 31; i++) {
       birthDayDropdown.addItem(i);
     }
 
-    JLabel birthMonthLabel = new JLabel("Date of Birth (Month):");
     JComboBox<Integer> birthMonthDropdown = new JComboBox<>();
     for (int i = 1; i <= 12; i++) {
       birthMonthDropdown.addItem(i);
     }
-
-    JLabel birthYearLabel = new JLabel("Date of Birth (Year):");
-    JComboBox<Integer> birthYearDropdown = new JComboBox<>();
-    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-    for (int i = currentYear; i >= currentYear - 100; i--) { // For the last 100 years
-      birthYearDropdown.addItem(i);
-    }
+    JPanel birthDatePanel = new JPanel();
+    birthDatePanel.setLayout(new FlowLayout());
+    birthDatePanel.add(birthDateLabel);
+    birthDatePanel.add(birthYearDropdown);
+    birthDatePanel.add(birthMonthDropdown);
+    birthDatePanel.add(birthDayDropdown);
 
     JLabel positionLabel = new JLabel("Position:");
-    JComboBox<Position> positionDropdown = new JComboBox<>(Position.values());
+    JComboBox<Position> positionDropdown = new JComboBox<>();
+    for ( Position position : Position.values() ){
+      if ( position != Position.BENCH ){
+        positionDropdown.addItem(position);
+      }
+    }
+    JPanel positionPanel = new JPanel();
+    positionPanel.setLayout(new FlowLayout());
+    positionPanel.add(positionLabel);
+    positionPanel.add(positionDropdown);
 
     JLabel skillLevelLabel = new JLabel("Skill Level:");
     JComboBox<Integer> skillLevelDropdown = new JComboBox<>();
     for (int i = 1; i <= 5; i++) {
       skillLevelDropdown.addItem(i);
     }
+    JPanel skillLevelPanel = new JPanel();
+    skillLevelPanel.setLayout(new FlowLayout());
+    skillLevelPanel.add(skillLevelLabel);
+    skillLevelPanel.add(skillLevelDropdown);
 
+    JPanel submitButtonPanel = new JPanel();
     JButton submitButton = new JButton("Submit");
-    submitButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        Integer day = birthDayDropdown.getSelectedIndex() + 1; // +1 because index is 0-based
-        Integer month = (Integer) birthMonthDropdown.getSelectedItem();
-        String year = birthYearDropdown.getSelectedItem().toString();
-        String position = positionDropdown.getSelectedItem().toString();
-        int skillLevel = (int) skillLevelDropdown.getSelectedItem();
-        String dateOfBirth = year + "-" + String.format("%02d", month)+ "-" + String.format("%02d", day);
+    submitButton.setPreferredSize(new Dimension(100, 45));
+    submitButtonPanel.add(submitButton);
+    submitButton.addActionListener(e -> {
+      String firstName = firstNameField.getText();
+      String lastName = lastNameField.getText();
+      Integer day = (Integer) birthDayDropdown.getSelectedItem();
+      Integer month = (Integer) birthMonthDropdown.getSelectedItem();
+      String year = birthYearDropdown.getSelectedItem().toString();
+      String position = positionDropdown.getSelectedItem().toString();
+      int skillLevel = (int) skillLevelDropdown.getSelectedItem();
+      String dateOfBirth = year + "-" + String.format("%02d", month)+ "-" + String.format("%02d", day);
 
-        controller.addPlayer(firstName, lastName, dateOfBirth, position, skillLevel);
-      }
+      controller.addPlayer(firstName, lastName, dateOfBirth, position, skillLevel);
     });
-      inputPanel.add(firstNameLabel);
-      inputPanel.add(firstNameField);
-      inputPanel.add(lastNameLabel);
-      inputPanel.add(lastNameField);
-      inputPanel.add(birthDayLabel);
-      inputPanel.add(birthDayDropdown);
-      inputPanel.add(birthMonthLabel);
-      inputPanel.add(birthMonthDropdown);
-      inputPanel.add(birthYearLabel);
-      inputPanel.add(birthYearDropdown);
-      inputPanel.add(positionLabel);
-      inputPanel.add(positionDropdown);
-      inputPanel.add(skillLevelLabel);
-      inputPanel.add(skillLevelDropdown);
-      inputPanel.add(submitButton);
+
+      inputPanel.setLayout(new GridLayout(8,1));
+      inputPanel.add(new Panel());
+      inputPanel.add(firstNamePanel);
+      inputPanel.add(lastNamePanel);
+      inputPanel.add(birthDatePanel);
+      inputPanel.add(positionPanel);
+      inputPanel.add(skillLevelPanel);
+      inputPanel.add(submitButtonPanel);
+
+      changeFontSize(inputPanel, 16);
       inputPanel.revalidate();
       inputPanel.repaint();
     }
@@ -171,16 +223,30 @@ public class SoccerTeamView extends JFrame implements IView{
   @Override
   public void showRemovePlayerForm() {
     inputPanel.removeAll();
-    inputPanel.setLayout(new FlowLayout());
 
-    JTextField jerseyNumberField = new JTextField(10);
+    JComboBox<Integer> jerseyNumberDropdown = new JComboBox<>();
+    for (int i = 1; i <= 20; i++) {
+      jerseyNumberDropdown.addItem(i);
+    }
+    JPanel jerseyNumberPanel = new JPanel();
+    jerseyNumberPanel.add(new JLabel("Jersey Number:"));
+    jerseyNumberPanel.add(jerseyNumberDropdown);
+
     JButton removePlayerBtn = new JButton("Remove Player");
-    removePlayerBtn.addActionListener(e -> controller.removePlayer(Integer.parseInt(jerseyNumberField.getText())));
+    removePlayerBtn.setPreferredSize(new Dimension(200,45));
+    removePlayerBtn.addActionListener(e -> {
+      controller.removePlayer(Integer.parseInt(jerseyNumberDropdown.getSelectedItem().toString()));
+    });
+    JPanel removeButtonPanel = new JPanel();
+    removeButtonPanel.add(removePlayerBtn);
 
-    inputPanel.add(new JLabel("Jersey Number:"));
-    inputPanel.add(jerseyNumberField);
-    inputPanel.add(removePlayerBtn);
 
+    inputPanel.setLayout(new GridLayout(6,1));
+    inputPanel.add(new Panel());
+    inputPanel.add(jerseyNumberPanel);
+    inputPanel.add(removeButtonPanel);
+
+    changeFontSize(inputPanel, 16);
     revalidate();
     repaint();
   }
